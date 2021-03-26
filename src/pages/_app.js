@@ -1,3 +1,4 @@
+import React from 'react';
 import GlobalStyles from 'styles/index.style';
 
 function MyApp ({ Component, pageProps }) {
@@ -7,4 +8,4 @@ function MyApp ({ Component, pageProps }) {
   </>;
 }
 
-export default MyApp
+export default MyApp;
