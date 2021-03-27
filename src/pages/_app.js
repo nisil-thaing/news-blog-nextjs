@@ -1,4 +1,7 @@
 import React from 'react';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import GlobalStyles from 'styles/index.style';
 
 function MyApp ({ Component, pageProps }) {
