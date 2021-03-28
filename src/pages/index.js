@@ -6,6 +6,7 @@ import {
   MainWrapper,
   FooterWrapper
 } from 'styles/pages/HomePage.style';
+import MainHeader from 'components/MainHeader/MainHeader';
 
 function HomePage () {
   return <Container className="d-flex flex-column justify-content-center align-items-center">
@@ -13,6 +14,7 @@ function HomePage () {
       <title>News Blog NextJs</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
+    <MainHeader />
     <MainWrapper className="d-flex flex-column justify-content-center align-items-center">
       <h1 className="m-0 text-center title">
         Welcome to <a href="https://nextjs.org">Next.js!</a>
@@ -45,9 +47,7 @@ function HomePage () {
           href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
           className="card">
           <h3>Deploy &rarr;</h3>
-          <p>
-            Instantly deploy your Next.js site to a public URL with Vercel.
-          </p>
+          <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
         </a>
       </div>
     </MainWrapper>

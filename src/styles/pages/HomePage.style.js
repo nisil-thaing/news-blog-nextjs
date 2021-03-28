@@ -2,7 +2,6 @@ import styled from 'styled-components';
 
 export const Container = styled.section`
   min-height: 100vh;
-  padding: 0 0.5rem;
 `;
 
 export const MainWrapper = styled.main`
