@@ -67,15 +67,3 @@ export const MainWrapper = styled.main`
     }
   }
 `;
-
-export const FooterWrapper = styled.footer`
-  border-top: 1px solid #eaeaea;
-
-  img {
-    margin-left: 0.5rem;
-  }
-
-  .logo {
-    height: 1em;
-  }
-`;
