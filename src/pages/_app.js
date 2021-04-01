@@ -2,8 +2,9 @@ import React from 'react';
 import Head from 'next/head';
 
 import GlobalStyles from 'styles/index.style';
+import reduxWrapper from 'store';
 
-function MyApp ({ Component, pageProps }) {
+function MasterApp ({ Component, pageProps }) {
   return <>
     <Head>
       <meta charSet="utf-8" />
@@ -19,4 +20,4 @@ function MyApp ({ Component, pageProps }) {
   </>;
 }
 
-export default MyApp;
+export default reduxWrapper.withRedux(MasterApp);

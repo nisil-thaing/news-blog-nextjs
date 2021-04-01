@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Head from 'next/head';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import {
   Container,
@@ -9,7 +11,33 @@ import MainLayout from 'containers/MainLayout/MainLayout';
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
 
-function HomePage () {
+import reduxWrapper from 'store';
+import { TOAST_MESSAGE_POSITION, TOAST_MESSAGE_TYPES } from 'store/states/uiState';
+import { UI_ACTIONS } from 'store/actions/uiAction';
+import { getUIToastMessageState } from 'store/selectors/uiSelector';
+
+function HomePage ({ data, toastMessageState, showToastMessage }) {
+  useEffect(function () {
+    if (showToastMessage) {
+      showToastMessage({
+        type: TOAST_MESSAGE_TYPES.ERROR,
+        message: 'Client-side dispatch: This is a testing error',
+        position: {
+          vertical: TOAST_MESSAGE_POSITION.VERTICAL.TOP,
+          horizontal: TOAST_MESSAGE_POSITION.HORIZONTAL.RIGHT
+        }
+      });
+    }
+  }, [ showToastMessage ]);
+
+  useEffect(function () {
+    console.log('Techinasia data: ', data);
+  }, [ data ]);
+
+  useEffect(function () {
+    console.log('toastMessageState: ', toastMessageState);
+  }, [ toastMessageState ]);
+
   return <Container className="d-flex flex-column justify-content-center align-items-center">
     <Head>
       <title>News Blog NextJs</title>
@@ -56,4 +84,42 @@ function HomePage () {
   </Container>;
 }
 
-export default HomePage;
+// eslint-disable-next-line no-unused-vars
+export const getServerSideProps = reduxWrapper.getServerSideProps(async function ({ store }) {
+  const res = await fetch('https://www.techinasia.com/wp-json/techinasia/2.0/posts?page=1&per_page=10');
+  const data = await res.json();
+
+  store.dispatch(UI_ACTIONS.showToastMessage({
+    type: TOAST_MESSAGE_TYPES.ERROR,
+    message: 'Server-side dispatch: This is a testing error',
+    position: {
+      vertical: TOAST_MESSAGE_POSITION.VERTICAL.TOP,
+      horizontal: TOAST_MESSAGE_POSITION.HORIZONTAL.RIGHT
+    }
+  }));
+
+  if (!data) {
+    return {
+      notFound: true
+    };
+  }
+
+  return {
+    props: { data }
+  };
+});
+
+function mapStateToProps (state) {
+  return {
+    toastMessageState: getUIToastMessageState(state)
+  };
+}
+
+function mapDispatchToProps (dispatch) {
+  return {
+    showToastMessage: bindActionCreators(UI_ACTIONS.showToastMessage, dispatch)
+    // startClock: bindActionCreators(startClock, dispatch),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePage);
