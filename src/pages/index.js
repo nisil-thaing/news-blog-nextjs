@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
+import { END } from 'redux-saga';
 
 import {
   Container,
@@ -12,31 +12,13 @@ import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
 
 import reduxWrapper from 'store';
-import { TOAST_MESSAGE_POSITION, TOAST_MESSAGE_TYPES } from 'store/states/uiState';
-import { UI_ACTIONS } from 'store/actions/uiAction';
-import { getUIToastMessageState } from 'store/selectors/uiSelector';
+import { DEMO_DATA_ACTIONS } from 'store/actions/demoDataAction';
+import { getDemoData } from 'store/selectors/demoDataSelector';
 
-function HomePage ({ data, toastMessageState, showToastMessage }) {
+function HomePage ({ demoData }) {
   useEffect(function () {
-    if (showToastMessage) {
-      showToastMessage({
-        type: TOAST_MESSAGE_TYPES.ERROR,
-        message: 'Client-side dispatch: This is a testing error',
-        position: {
-          vertical: TOAST_MESSAGE_POSITION.VERTICAL.TOP,
-          horizontal: TOAST_MESSAGE_POSITION.HORIZONTAL.RIGHT
-        }
-      });
-    }
-  }, [ showToastMessage ]);
-
-  useEffect(function () {
-    console.log('Techinasia data: ', data);
-  }, [ data ]);
-
-  useEffect(function () {
-    console.log('toastMessageState: ', toastMessageState);
-  }, [ toastMessageState ]);
+    console.log('Techinasia data: ', demoData);
+  }, [ demoData ]);
 
   return <Container className="d-flex flex-column justify-content-center align-items-center">
     <Head>
@@ -84,42 +66,24 @@ function HomePage ({ data, toastMessageState, showToastMessage }) {
   </Container>;
 }
 
-// eslint-disable-next-line no-unused-vars
 export const getServerSideProps = reduxWrapper.getServerSideProps(async function ({ store }) {
-  const res = await fetch('https://www.techinasia.com/wp-json/techinasia/2.0/posts?page=1&per_page=10');
-  const data = await res.json();
-
-  store.dispatch(UI_ACTIONS.showToastMessage({
-    type: TOAST_MESSAGE_TYPES.ERROR,
-    message: 'Server-side dispatch: This is a testing error',
-    position: {
-      vertical: TOAST_MESSAGE_POSITION.VERTICAL.TOP,
-      horizontal: TOAST_MESSAGE_POSITION.HORIZONTAL.RIGHT
-    }
-  }));
-
-  if (!data) {
-    return {
-      notFound: true
-    };
+  if (!store.getState().demoData?.data) {
+    store.dispatch(DEMO_DATA_ACTIONS.fetchDemoData());
+    store.dispatch(END);
   }
 
-  return {
-    props: { data }
-  };
+  await store.sagaTask.toPromise();
 });
 
 function mapStateToProps (state) {
   return {
-    toastMessageState: getUIToastMessageState(state)
+    demoData: getDemoData(state)
   };
 }
 
+// eslint-disable-next-line no-unused-vars
 function mapDispatchToProps (dispatch) {
-  return {
-    showToastMessage: bindActionCreators(UI_ACTIONS.showToastMessage, dispatch)
-    // startClock: bindActionCreators(startClock, dispatch),
-  };
+  return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomePage);

@@ -1,40 +1,42 @@
 import { createStore, applyMiddleware } from 'redux';
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
+import createSagaMiddleware from 'redux-saga';
 
-// import thunkMiddleware from 'redux-thunk';
 // import count from './count/reducer';
 // import tick from './tick/reducer';
 
 import createRootReducer from 'store/reducers';
+import rootSaga from 'store/sagas';
 
-function bindMiddleware (middleware) {
+function bindMiddlewares (middlewares) {
   if (process.env.NODE_ENV !== 'production') {
     const { composeWithDevTools } = require('redux-devtools-extension');
-    return composeWithDevTools(applyMiddleware(...middleware));
+    return composeWithDevTools(applyMiddleware(...middlewares));
   }
 
-  return applyMiddleware(...middleware);
+  return applyMiddleware(...middlewares);
 }
-
-const combinedReducer = createRootReducer();
 
 function reducer (state, action) {
   if (action.type === HYDRATE) {
-    const nextState = {
-      ...state, // use previous state
-      ...action.payload // apply delta from hydration
+    return {
+      ...state,
+      ...action.payload
     };
-
-    // if (state.count.count) nextState.count.count = state.count.count; // preserve count value on client side navigation
-
-    return nextState;
   } else {
+    const combinedReducer = createRootReducer();
     return combinedReducer(state, action);
   }
 }
 
 function initStore () {
-  return createStore(reducer, bindMiddleware([/* thunkMiddleware */]));
+  const sagaMiddleware = createSagaMiddleware();
+
+  const store = createStore(reducer, bindMiddlewares([ sagaMiddleware ]));
+
+  store.sagaTask = sagaMiddleware.run(rootSaga);
+
+  return store;
 }
 
 export default createWrapper(initStore);
