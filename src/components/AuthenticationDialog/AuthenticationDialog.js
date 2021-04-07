@@ -16,6 +16,11 @@ function AuthenticationDialog () {
     <Modal.Header closeButton>
       <Modal.Title>This is { type } dialog</Modal.Title>
     </Modal.Header>
+    <section className="justify-content-end align-items-center modal-header">
+      <button type="button" className="d-block m-0 p-0 close">
+        <i className="d-inherit bi bi-x" />
+      </button>
+    </section>
 
     <Modal.Body>
       <p>Modal body text goes here.</p>

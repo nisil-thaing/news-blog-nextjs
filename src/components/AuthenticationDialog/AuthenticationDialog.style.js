@@ -17,6 +17,14 @@ export const Container = styled(Modal)`
     height: 100%;
   }
 
+  .modal-header {
+    i {
+      &:before {
+        display: inherit;
+      }
+    }
+  }
+
   ${medias.SMALL_SCREEN`
     .modal-dialog {
       margin: auto;

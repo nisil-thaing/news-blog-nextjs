@@ -13,6 +13,11 @@ function MainHeader () {
     showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG);
   }
 
+  function handleOpenRegistrationDialog (event) {
+    event.stopPropagation();
+    showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
+  }
+
   return <Container className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark w-100">
     <div className="container">
       <div className="d-flex justify-content-between align-items-center w-100">
@@ -31,7 +36,8 @@ function MainHeader () {
           </button>
           <button
             type="button"
-            className="ml-1 ml-md-3 btn btn-secondary">
+            className="ml-1 ml-md-3 btn btn-secondary"
+            onClick={ handleOpenRegistrationDialog }>
             Get Started
           </button>
         </div>
