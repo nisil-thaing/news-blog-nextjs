@@ -1,16 +1,23 @@
 import { createGlobalStyle } from 'styled-components';
 
+import { COLORS, FONT_BASE } from 'constants/app-styles.constant';
+
 const GlobalStyles = createGlobalStyle`
-  html, body {
-    padding: 0;
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  /* Reboot - START */
+  html {
+    font-size: ${ FONT_BASE }px;
+    
+    * {
+      font-family: 'Nunito', sans-serif;
+      letter-spacing: 0.05em;
+    }
   }
 
-  a {
-    color: inherit;
-    text-decoration: none;
+  body {
+    color: ${ COLORS.BLACK };
+    background-color: ${ COLORS.WHITE };
   }
+  /* Reboot - END */
 
   * {
     box-sizing: border-box;

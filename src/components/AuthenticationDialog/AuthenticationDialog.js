@@ -2,12 +2,17 @@ import React from 'react';
 
 import { Modal } from 'react-bootstrap';
 
+import { Container } from './AuthenticationDialog.style';
 import { useAuthenticationDialog } from 'hocs/withAuthenticationPopup';
 
 function AuthenticationDialog () {
   const { isShowing, type, hideAuthenticationDialog } = useAuthenticationDialog();
 
-  return <Modal show={ isShowing } onHide={ hideAuthenticationDialog }>
+  return <Container
+    show={ isShowing }
+    centered={ true }
+    onHide={ hideAuthenticationDialog }
+    autoFocus={ false }>
     <Modal.Header closeButton>
       <Modal.Title>This is { type } dialog</Modal.Title>
     </Modal.Header>
@@ -20,7 +25,7 @@ function AuthenticationDialog () {
       <button type="button" className="btn btn-secondary">Close</button>
       <button type="button" className="btn btn-primary">Save changes</button>
     </Modal.Footer>
-  </Modal>;
+  </Container>;
 }
 
 export default AuthenticationDialog;

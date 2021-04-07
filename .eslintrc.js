@@ -37,6 +37,7 @@ module.exports = {
     'linebreak-style': ['error', 'unix'],
     quotes: ['error', 'single'],
     semi: ['error', 'always'],
+    'jsx-a11y/no-autofocus': 'off',
     'no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
     'arrow-parens': ['error', 'as-needed'],
     'react-hooks/rules-of-hooks': 'error', // Checks rules of Hooks
