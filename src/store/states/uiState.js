@@ -16,7 +16,17 @@ export const TOAST_MESSAGE_TYPES = {
   SUCCESS: 'success'
 };
 
+export const AUTHENTICATION_DIALOG_TYPES = {
+  LOGIN_DIALOG: 'AUTHENTICATION_LOGIN_DIALOG',
+  REGISTRATION_DIALOG: 'AUTHENTICATION_REGISTRATION_DIALOG'
+};
+
 export const UI_INITIAL_STATE = {
+  authenticationDialog: {
+    isShowing: false,
+    type: null,
+    data: null
+  },
   toastMessage: {
     isShowing: false,
     type: null,

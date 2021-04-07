@@ -1,6 +1,8 @@
 import React from 'react';
 import { func, node, oneOfType, string } from 'prop-types';
 
+import withAuthenticationPopup from 'hocs/withAuthenticationPopup';
+
 function MainLayout ({ children, ...restProps }) {
   return <>
     { restProps.header ? <restProps.header /> : null }
@@ -15,4 +17,4 @@ MainLayout.propTypes = {
   footer: oneOfType([ func, string ])
 };
 
-export default MainLayout;
+export default withAuthenticationPopup(MainLayout);

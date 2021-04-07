@@ -1,8 +1,18 @@
 import React from 'react';
 
 import { Container } from './MainHeader.style';
+import { useAuthenticationDialog } from 'hocs/withAuthenticationPopup';
+
+import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 
 function MainHeader () {
+  const { showAuthenticationDialog } = useAuthenticationDialog();
+
+  function handleOpenLoginDialog (event) {
+    event.stopPropagation();
+    showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG);
+  }
+
   return <Container className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark w-100">
     <div className="container">
       <div className="d-flex justify-content-between align-items-center w-100">
@@ -15,7 +25,8 @@ function MainHeader () {
         <div className="right-content">
           <button
             type="button"
-            className="text-decoration-none text-light btn btn-link">
+            className="text-decoration-none text-light btn btn-link"
+            onClick={ handleOpenLoginDialog }>
             Sign In
           </button>
           <button
