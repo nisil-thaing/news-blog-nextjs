@@ -10,12 +10,18 @@ function MainHeader () {
 
   function handleOpenLoginDialog (event) {
     event.stopPropagation();
-    showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG);
+    showAuthenticationDialog(
+      AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG,
+      { title: 'Log in' }
+    );
   }
 
   function handleOpenRegistrationDialog (event) {
     event.stopPropagation();
-    showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
+    showAuthenticationDialog(
+      AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG,
+      { title: 'Sign up' }
+    );
   }
 
   return <Container className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark w-100">
