@@ -1,12 +1,11 @@
 import React from 'react';
-
-import { Modal } from 'react-bootstrap';
+import { node } from 'prop-types';
 
 import { Container } from './AuthenticationDialog.style';
 import { useAuthenticationDialog } from 'hocs/withAuthenticationPopup';
 
-function AuthenticationDialog () {
-  const { isShowing/* , type */, hideAuthenticationDialog } = useAuthenticationDialog();
+function AuthenticationDialog ({ children }) {
+  const { isShowing, hideAuthenticationDialog } = useAuthenticationDialog();
 
   return <Container
     show={ isShowing }
@@ -14,18 +13,21 @@ function AuthenticationDialog () {
     onHide={ hideAuthenticationDialog }
     autoFocus={ false }>
     <section className="justify-content-end align-items-center border-0 modal-header">
-      <button type="button" className="d-block m-0 p-0 close">
+      <button
+        type="button"
+        className="d-block m-0 p-0 close"
+        onClick={ hideAuthenticationDialog }>
         <i className="d-inherit bi bi-x" />
       </button>
     </section>
     <section className="modal-body">
-      Form body
+      { children }
     </section>
-    <Modal.Footer>
-      <button type="button" className="btn btn-secondary">Close</button>
-      <button type="button" className="btn btn-primary">Save changes</button>
-    </Modal.Footer>
   </Container>;
 }
+
+AuthenticationDialog.propTypes = {
+  children: node.isRequired
+};
 
 export default AuthenticationDialog;

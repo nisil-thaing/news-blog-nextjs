@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 
 import AuthenticationDialog from 'components/AuthenticationDialog/AuthenticationDialog';
+import LoginForm from 'components/LoginForm/LoginForm';
+import RegistrationForm from 'components/RegistrationForm/RegistrationForm';
 
+import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 import { UI_ACTIONS } from 'store/actions/uiAction';
 import {
   getAuthenticationDialogState,
@@ -50,7 +53,16 @@ function withAuthenticationPopup (WrapperComponent) {
         isShowingAuthenticationDialog={ undefined }
         showAuthenticationDialog={ undefined }
         hideAuthenticationDialog={ undefined } />
-      <AuthenticationDialog />
+      <AuthenticationDialog>
+        {
+          props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG
+            && <LoginForm />
+        }
+        {
+          props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG
+            && <RegistrationForm />
+        }
+      </AuthenticationDialog>
     </LayoutContext.Provider>;
   });
 }
@@ -59,7 +71,7 @@ export function useAuthenticationDialog () {
   const context = React.useContext(LayoutContext);
 
   if (context === undefined) {
-    throw new Error('useAuthenticationDialog must be used within a MainLayout');
+    throw new Error('useAuthenticationDialog must be used within the withAuthenticationPopup');
   }
 
   return context;
