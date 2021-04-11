@@ -66,7 +66,7 @@ function HomePage ({ demoData }) {
   </Container>;
 }
 
-export const getServerSideProps = reduxWrapper.getServerSideProps(async function ({ store }) {
+export const getStaticProps = reduxWrapper.getStaticProps(async function ({ store }) {
   if (!store.getState().demoData?.data) {
     store.dispatch(DEMO_DATA_ACTIONS.fetchDemoData());
     store.dispatch(END);

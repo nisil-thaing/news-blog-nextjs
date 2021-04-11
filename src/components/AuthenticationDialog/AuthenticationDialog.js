@@ -20,7 +20,7 @@ function AuthenticationDialog ({ children }) {
         <i className="d-inherit bi bi-x" />
       </button>
     </section>
-    <section className="modal-body">
+    <section className="p-4 modal-body">
       { children }
     </section>
   </Container>;
