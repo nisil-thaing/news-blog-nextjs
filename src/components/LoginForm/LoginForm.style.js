@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 
-import { COLORS } from 'constants/app-styles.constant';
+import { COLORS, FONT_WEIGHTS } from 'constants/app-styles.constant';
+import { pixelsToRem } from 'styles/mixins.style';
 
 export const Container = styled.section`
   i {
@@ -11,11 +12,32 @@ export const Container = styled.section`
 
   button {
     border-radius: 100px;
+
+    &:hover, &:focus, &:active {
+      outline: none;
+      box-shadow: none;
+    }
+  }
+
+  .span-note {
+    font-size: ${ pixelsToRem(14) };
+    line-height: 100%;
+  }
+
+  .switching-form-button {
+    button {
+      font-weight: ${ FONT_WEIGHTS.BOLD };
+    }
+
+    > * {
+      font-size: ${ pixelsToRem(14) };
+      line-height: 100%;
+    }
   }
 `;
 
 export const FormWrapper = styled.form`
-  input, .btn-link {
+  input {
     &:hover, &:focus, &:active {
       outline: none;
       box-shadow: none;
@@ -25,9 +47,5 @@ export const FormWrapper = styled.form`
   .form-control {
     border: none;
     border-bottom: 1px solid ${ COLORS.GRAY1 };
-
-    button {
-      color: ${ COLORS.BLACK };
-    }
   }
 `;

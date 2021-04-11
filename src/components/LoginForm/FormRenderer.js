@@ -44,7 +44,7 @@ function FormRenderer ({ values, handleChange, handleBlur, handleSubmit }) {
         autoComplete="on" />
       <button
         type="button"
-        className="p-0 pl-2 btn btn-link"
+        className="text-dark text-decoration-none p-0 pl-2 btn btn-link"
         onClick={ handleToggleShowingPassword }>
         <i className={ classnames('d-block bi', {
           'bi-eye-fill': isShowingPassword,

@@ -1,4 +1,5 @@
 import React from 'react';
+import { func } from 'prop-types';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
 
@@ -18,7 +19,7 @@ const INITIAL_DATA = {
   password: ''
 };
 
-function LoginForm () {
+function LoginForm ({ onSwitchToRegistrationForm }) {
   function handleSubmit (values) {
     console.log({ values });
   }
@@ -43,7 +44,7 @@ function LoginForm () {
         </button>
       </div>
       <div className="col-12 mt-4">
-        <p className="d-flex justify-content-center align-items-center text-uppercase w-100 mb-0">
+        <p className="d-flex justify-content-center align-items-center text-uppercase text-secondary w-100 mb-0 span-note">
           <i className="mr-2 bi bi-envelope" />
           Or log in using email
           <i className="ml-2 bi bi-arrow-down" />
@@ -56,7 +57,27 @@ function LoginForm () {
       onSubmit={ handleSubmit }>
       { props => <FormRenderer { ...props } /> }
     </Formik>
+    <div className="mt-2 text-center">
+      <button
+        type="button"
+        className="text-danger btn btn link">
+        <u>Forgot password?</u>
+      </button>
+    </div>
+    <div className="d-flex justify-content-center align-items-baseline mt-5 switching-form-button">
+      <p className="m-0">Don’t have an account?</p>
+      <button
+        type="button"
+        className="text-dark ml-1 p-0 btn btn-link"
+        onClick={ onSwitchToRegistrationForm }>
+        <u>Sign up</u>
+      </button>
+    </div>
   </Container>;
 }
+
+LoginForm.propTypes = {
+  onSwitchToRegistrationForm: func
+};
 
 export default LoginForm;
