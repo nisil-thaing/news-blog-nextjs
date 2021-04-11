@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import classnames from 'classnames';
+import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
 
-import { Container, FormWrapper } from './LoginForm.style';
+import { Container } from './LoginForm.style';
+import FormRenderer from './FormRenderer';
+
+const SCHEMA = Yup.object().shape({
+  email: Yup.string()
+    .email('Please input a valid email!')
+    .required('Please input a valid email!'),
+  password: Yup.string()
+    .required('Please choose a secure password!')
+});
+
+const INITIAL_DATA = {
+  email: '',
+  password: ''
+};
 
 function LoginForm () {
-  const [ isShowingPassword, toggleShowingPassword ] = useState(false);
-  const { register, handleSubmit } = useForm();
-
-  function handleToggleShowingPassword (event) {
-    event.stopPropagation();
-    toggleShowingPassword(!isShowingPassword);
-  }
-
-  function onSubmit (formData) {
-    console.log('formData: ', JSON.stringify(formData));
+  function handleSubmit (values) {
+    console.log({ values });
   }
 
   return <Container className="p-2 pl-md-4 pr-md-4">
@@ -44,36 +50,12 @@ function LoginForm () {
         </p>
       </div>
     </div>
-    <FormWrapper
-      className="mt-4 pt-3"
-      onSubmit={ handleSubmit(onSubmit) }>
-      <div className="p-0 rounded-0 form-control">
-        <input
-          type="email"
-          { ...register('email') }
-          placeholder="Email Address"
-          className="w-100 border-0" />
-      </div>
-      <div className="d-flex align-items-center mt-4 p-0 rounded-0 form-control">
-        <input
-          type={ isShowingPassword ? 'text' : 'password' }
-          { ...register('password') }
-          placeholder="Password"
-          className="w-100 border-0" />
-        <button
-          type="button"
-          className="btn btn-link"
-          onClick={ handleToggleShowingPassword }>
-          <i className={ classnames('bi', {
-            'bi-eye-fill': isShowingPassword,
-            'bi-eye-slash-fill': !isShowingPassword
-          }) } />
-        </button>
-      </div>
-      <button type="submit" className="text-uppercase mt-5 w-100 btn btn-danger">
-        Log in
-      </button>
-    </FormWrapper>
+    <Formik
+      initialValues={ INITIAL_DATA }
+      validationSchema={ SCHEMA }
+      onSubmit={ handleSubmit }>
+      { props => <FormRenderer { ...props } /> }
+    </Formik>
   </Container>;
 }
 
