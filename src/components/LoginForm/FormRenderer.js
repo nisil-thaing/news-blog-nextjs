@@ -19,7 +19,7 @@ function FormRenderer ({ values, handleChange, handleBlur, handleSubmit }) {
   return <Container
     className="mt-4 pt-3"
     onSubmit={ handleSubmit }>
-    <div className="p-0 rounded-0 form-control">
+    <div className="d-flex align-items-center p-0 rounded-0 form-control">
       <input
         name="email"
         type="email"
@@ -44,9 +44,9 @@ function FormRenderer ({ values, handleChange, handleBlur, handleSubmit }) {
         autoComplete="on" />
       <button
         type="button"
-        className="btn btn-link"
+        className="p-0 pl-2 btn btn-link"
         onClick={ handleToggleShowingPassword }>
-        <i className={ classnames('bi', {
+        <i className={ classnames('d-block bi', {
           'bi-eye-fill': isShowingPassword,
           'bi-eye-slash-fill': !isShowingPassword
         }) } />

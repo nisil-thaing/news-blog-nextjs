@@ -3,6 +3,12 @@ import styled from 'styled-components';
 import { COLORS } from 'constants/app-styles.constant';
 
 export const Container = styled.section`
+  i {
+    &:before {
+      display: inherit;
+    }
+  }
+
   button {
     border-radius: 100px;
   }

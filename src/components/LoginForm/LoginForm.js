@@ -24,7 +24,7 @@ function LoginForm () {
   }
 
   return <Container className="p-2 pl-md-4 pr-md-4">
-    <h1 className="mb-4 text-center">Log in</h1>
+    <h1 className="mb-5 text-center">Log in</h1>
     <div className="row">
       <div className="col-6 pr-1">
         <button
@@ -42,7 +42,7 @@ function LoginForm () {
           Google
         </button>
       </div>
-      <div className="col-12 mt-3">
+      <div className="col-12 mt-4">
         <p className="d-flex justify-content-center align-items-center text-uppercase w-100 mb-0">
           <i className="mr-2 bi bi-envelope" />
           Or log in using email
