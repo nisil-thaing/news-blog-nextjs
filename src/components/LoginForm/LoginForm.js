@@ -19,11 +19,7 @@ const INITIAL_DATA = {
   password: ''
 };
 
-function LoginForm ({ onSwitchToRegistrationForm }) {
-  function handleSubmit (values) {
-    console.log({ values });
-  }
-
+function LoginForm ({ onSwitchToRegistrationForm, onSubmit }) {
   return <Container className="p-2 pl-md-4 pr-md-4">
     <h1 className="mb-5 text-center">Log in</h1>
     <div className="row">
@@ -54,7 +50,7 @@ function LoginForm ({ onSwitchToRegistrationForm }) {
     <Formik
       initialValues={ INITIAL_DATA }
       validationSchema={ SCHEMA }
-      onSubmit={ handleSubmit }>
+      onSubmit={ onSubmit }>
       { props => <FormRenderer { ...props } /> }
     </Formik>
     <div className="mt-2 text-center">
@@ -77,7 +73,8 @@ function LoginForm ({ onSwitchToRegistrationForm }) {
 }
 
 LoginForm.propTypes = {
-  onSwitchToRegistrationForm: func
+  onSwitchToRegistrationForm: func,
+  onSubmit: func.isRequired
 };
 
 export default LoginForm;
