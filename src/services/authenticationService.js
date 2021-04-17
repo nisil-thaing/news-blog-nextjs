@@ -1,5 +1,7 @@
 import httpClient from 'services/httpClient';
 
+import { getDataBodyFromResponseToData } from 'utils/api-request.util';
+
 class AuthenticationService {
   #baseUrl = '/auth-tokens';
 
@@ -8,8 +10,8 @@ class AuthenticationService {
   }
 
   requestToLogin ({ email: username, password }) {
-    return httpClient.post(this.#baseUrl, { username, password });
-    // .then(mapNonStatusResponseToData)
+    return httpClient.post(this.#baseUrl, { username, password })
+      .then(getDataBodyFromResponseToData);
     // .catch(err => mapErrorResponseToErrorObject(err, 'Login'));
   }
 }

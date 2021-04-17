@@ -2,6 +2,10 @@ export const COOKIE_KEYS = {
   ACCESS_TOKEN: 'access_token'
 };
 
+export function getDataBodyFromResponseToData (responseData) {
+  return responseData.data;
+}
+
 export function setCookie (cname, cvalue, exSecs) {
   const today = new Date();
   today.setTime(today.getTime() + (exSecs * 1000));

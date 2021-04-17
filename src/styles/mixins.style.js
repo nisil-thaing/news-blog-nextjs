@@ -1,4 +1,4 @@
-import { css } from 'styled-components';
+import { css, keyframes } from 'styled-components';
 
 import { FONT_BASE, RESPONSIVE_BREAKPOINTS } from 'constants/app-styles.constant';
 
@@ -63,3 +63,12 @@ export const medias = {
 export function pixelsToRem (size) {
   return `${ (size / FONT_BASE) }rem`;
 }
+
+export const spinner = keyframes`
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+`;

@@ -5,6 +5,7 @@ import { bindActionCreators, compose } from 'redux';
 import AuthenticationDialog from 'components/AuthenticationDialog/AuthenticationDialog';
 import LoginForm from 'components/LoginForm/LoginForm';
 import RegistrationForm from 'components/RegistrationForm/RegistrationForm';
+import withLoginHandler from './withLoginHandler';
 
 import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 import { UI_ACTIONS } from 'store/actions/uiAction';
@@ -33,7 +34,8 @@ function mapDispatchToProps (dispatch) {
   };
 }
 
-const LayoutContext = createContext();
+const LayoutContext = createContext(),
+  LoginFormRenderer = withLoginHandler(LoginForm);
 
 function withAuthenticationPopup (WrapperComponent) {
   const enhance = compose(connect(mapStateToProps, mapDispatchToProps));
@@ -50,10 +52,6 @@ function withAuthenticationPopup (WrapperComponent) {
       props.showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
     }
 
-    function handleLogin (values) {
-      console.log({ values });
-    }
-
     return <LayoutContext.Provider value={ contextProps }>
       <WrapperComponent
         { ...props }
@@ -64,9 +62,7 @@ function withAuthenticationPopup (WrapperComponent) {
       <AuthenticationDialog>
         {
           props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG
-            && <LoginForm
-              onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm }
-              onSubmit={ handleLogin } />
+            && <LoginFormRenderer onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm } />
         }
         {
           props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG

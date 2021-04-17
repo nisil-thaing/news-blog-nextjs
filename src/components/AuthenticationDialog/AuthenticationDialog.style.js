@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Modal from 'react-bootstrap/Modal';
 
-import { medias, pixelsToRem } from 'styles/mixins.style';
+import { medias, pixelsToRem, spinner } from 'styles/mixins.style';
 
 export const Container = styled(Modal)`
   .modal-dialog {
@@ -34,4 +34,16 @@ export const Container = styled(Modal)`
       max-height: ${ pixelsToRem(640) };
     }
   `};
+`;
+
+export const LoadingWrapper = styled.div`
+  i {
+    font-size: ${ pixelsToRem(72) };
+    width: 1em;
+    animation: ${ spinner } infinite 2s linear;
+
+    &:before {
+      display: inherit;
+    }
+  }
 `;
