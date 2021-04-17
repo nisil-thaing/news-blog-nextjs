@@ -6,6 +6,16 @@ export function getDataBodyFromResponseToData (responseData) {
   return responseData.data;
 }
 
+export function mapErrorResponseToErrorObject (error, functionName = '') {
+  const newError = new Error(error);
+
+  if (functionName) {
+    newError.message = `${ functionName }: ${ newError.message }`;
+  }
+
+  throw newError;
+}
+
 export function setCookie (cname, cvalue, exSecs) {
   const today = new Date();
   today.setTime(today.getTime() + (exSecs * 1000));

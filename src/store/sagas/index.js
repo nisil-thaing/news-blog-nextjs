@@ -1,9 +1,11 @@
 import combineSagas from 'utils/combine-sagas.util';
 
 import demoDataSagas from './demoDataSaga';
+import authenticationUserSagas from './authenticationUserSaga';
 
 const SAGAS = [
-  demoDataSagas
+  demoDataSagas,
+  authenticationUserSagas
 ];
 
 function* rootSagas () {

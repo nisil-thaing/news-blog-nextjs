@@ -3,12 +3,14 @@ import { combineReducers } from 'redux';
 
 import demoDataReducer from './demoDataReducer';
 import uiReducer from './uiReducer';
+import authenticationUserReducer from './authenticationUserReducer';
 
 function createRootReducer (/* history */) {
   return combineReducers({
     // router: connectRouter(history),
     demoData: demoDataReducer,
-    ui: uiReducer
+    ui: uiReducer,
+    authenticationUser: authenticationUserReducer
   });
 }
 

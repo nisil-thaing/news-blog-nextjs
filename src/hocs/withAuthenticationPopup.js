@@ -1,4 +1,4 @@
-import React, { createContext } from 'react';
+import React, { createContext, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators, compose } from 'redux';
 
@@ -9,28 +9,34 @@ import withLoginHandler from './withLoginHandler';
 
 import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 import { UI_ACTIONS } from 'store/actions/uiAction';
+import { AUTHENTICATION_USER_ACTIONS } from 'store/actions/authenticationUserAction';
 import {
   getAuthenticationDialogState,
   getWhetherShowingAuthenticationDialog
 } from 'store/selectors/uiSelector';
+import { getWhetherCredentialsUserExisted } from 'store/selectors/authenticationUserSelector';
 
 function mapStateToProps (state) {
   const authenticationDialogState = getAuthenticationDialogState(state),
-    isShowingAuthenticationDialog = getWhetherShowingAuthenticationDialog(state);
+    isShowingAuthenticationDialog = getWhetherShowingAuthenticationDialog(state),
+    isLoggedInState = getWhetherCredentialsUserExisted(state);
 
   return {
     authenticationDialogState,
-    isShowingAuthenticationDialog
+    isShowingAuthenticationDialog,
+    isLoggedInState
   };
 }
 
 function mapDispatchToProps (dispatch) {
   const showAuthenticationDialog = bindActionCreators(UI_ACTIONS.showAuthenticationDialog, dispatch),
-    hideAuthenticationDialog = bindActionCreators(UI_ACTIONS.hideAuthenticationDialog, dispatch);
+    hideAuthenticationDialog = bindActionCreators(UI_ACTIONS.hideAuthenticationDialog, dispatch),
+    fetchAuthenticationUserProfile = bindActionCreators(AUTHENTICATION_USER_ACTIONS.fetchAuthenticationUserProfile, dispatch);
 
   return {
     showAuthenticationDialog,
-    hideAuthenticationDialog
+    hideAuthenticationDialog,
+    fetchAuthenticationUserProfile
   };
 }
 
@@ -48,6 +54,11 @@ function withAuthenticationPopup (WrapperComponent) {
       hideAuthenticationDialog: props.hideAuthenticationDialog
     };
 
+    useEffect(function () {
+      props.fetchAuthenticationUserProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     function handleSwitchingToRegistrationForm () {
       props.showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
     }
@@ -58,17 +69,20 @@ function withAuthenticationPopup (WrapperComponent) {
         authenticationDialogState={ undefined }
         isShowingAuthenticationDialog={ undefined }
         showAuthenticationDialog={ undefined }
-        hideAuthenticationDialog={ undefined } />
-      <AuthenticationDialog>
-        {
-          props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG
-            && <LoginFormRenderer onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm } />
-        }
-        {
-          props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG
-            && <RegistrationForm />
-        }
-      </AuthenticationDialog>
+        hideAuthenticationDialog={ undefined }
+        fetchAuthenticationUserProfile={ undefined } />
+      {
+        !props.isLoggedInState && <AuthenticationDialog>
+          {
+            props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG
+              && <LoginFormRenderer onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm } />
+          }
+          {
+            props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG
+              && <RegistrationForm />
+          }
+        </AuthenticationDialog>
+      }
     </LayoutContext.Provider>;
   });
 }
