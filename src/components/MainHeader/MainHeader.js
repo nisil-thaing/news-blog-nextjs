@@ -6,7 +6,10 @@ import { useAuthenticationDialog } from 'hocs/withAuthenticationPopup';
 import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 
 function MainHeader () {
-  const { showAuthenticationDialog } = useAuthenticationDialog();
+  const {
+    isLoggedInState,
+    showAuthenticationDialog
+  } = useAuthenticationDialog();
 
   function handleOpenLoginDialog (event) {
     event.stopPropagation();
@@ -28,18 +31,24 @@ function MainHeader () {
           </a>
         </div>
         <div className="right-content">
-          <button
-            type="button"
-            className="text-decoration-none text-light btn btn-link"
-            onClick={ handleOpenLoginDialog }>
-            Sign In
-          </button>
-          <button
-            type="button"
-            className="ml-1 ml-md-3 btn btn-secondary"
-            onClick={ handleOpenRegistrationDialog }>
-            Get Started
-          </button>
+          {
+            isLoggedInState
+              ? null
+              : <>
+                <button
+                  type="button"
+                  className="text-decoration-none text-light btn btn-link"
+                  onClick={ handleOpenLoginDialog }>
+                  Sign In
+                </button>
+                <button
+                  type="button"
+                  className="ml-1 ml-md-3 btn btn-secondary"
+                  onClick={ handleOpenRegistrationDialog }>
+                  Get Started
+                </button>
+              </>
+          }
         </div>
       </div>
     </div>

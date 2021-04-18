@@ -14,24 +14,32 @@ import {
   getAuthenticationDialogState,
   getWhetherShowingAuthenticationDialog
 } from 'store/selectors/uiSelector';
-import { getWhetherCredentialsUserExisted } from 'store/selectors/authenticationUserSelector';
+import {
+  getAuthenticationUserProfile,
+  getWhetherCredentialsUserExisted
+} from 'store/selectors/authenticationUserSelector';
 
 function mapStateToProps (state) {
   const authenticationDialogState = getAuthenticationDialogState(state),
     isShowingAuthenticationDialog = getWhetherShowingAuthenticationDialog(state),
-    isLoggedInState = getWhetherCredentialsUserExisted(state);
+    isLoggedInState = getWhetherCredentialsUserExisted(state),
+    credentialsUserProfile = getAuthenticationUserProfile(state);
 
   return {
     authenticationDialogState,
     isShowingAuthenticationDialog,
-    isLoggedInState
+    isLoggedInState,
+    credentialsUserProfile
   };
 }
 
 function mapDispatchToProps (dispatch) {
   const showAuthenticationDialog = bindActionCreators(UI_ACTIONS.showAuthenticationDialog, dispatch),
     hideAuthenticationDialog = bindActionCreators(UI_ACTIONS.hideAuthenticationDialog, dispatch),
-    fetchAuthenticationUserProfile = bindActionCreators(AUTHENTICATION_USER_ACTIONS.fetchAuthenticationUserProfile, dispatch);
+    fetchAuthenticationUserProfile = bindActionCreators(
+      AUTHENTICATION_USER_ACTIONS.fetchAuthenticationUserProfile,
+      dispatch
+    );
 
   return {
     showAuthenticationDialog,
@@ -50,8 +58,11 @@ function withAuthenticationPopup (WrapperComponent) {
     const contextProps = {
       ...props.authenticationDialogState,
       isShowing: props.isShowingAuthenticationDialog,
+      isLoggedInState: props.isLoggedInState,
+      credentialsUserProfile: props.credentialsUserProfile,
       showAuthenticationDialog: props.showAuthenticationDialog,
-      hideAuthenticationDialog: props.hideAuthenticationDialog
+      hideAuthenticationDialog: props.hideAuthenticationDialog,
+      fetchCredentialsUserProfile: props.fetchAuthenticationUserProfile
     };
 
     useEffect(function () {

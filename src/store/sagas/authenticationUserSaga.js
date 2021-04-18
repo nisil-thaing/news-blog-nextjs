@@ -1,6 +1,6 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects';
 
-import { COOKIE_KEYS, deleteCookie } from 'utils/api-request.util';
+import { COOKIE_KEYS, deleteCookie, getCookie } from 'utils/api-request.util';
 import AuthenticationService from 'services/authenticationService';
 import { TOAST_MESSAGE_POSITION, TOAST_MESSAGE_TYPES } from 'store/states/uiState';
 import { UI_ACTION_TYPES } from 'store/actions/uiAction';
@@ -10,6 +10,15 @@ const authenticationService = new AuthenticationService();
 
 function* fetchAuthenticationUserProfileSaga () {
   try {
+    const accessToken = getCookie(COOKIE_KEYS.ACCESS_TOKEN);
+
+    if (!accessToken) {
+      return yield put({
+        type: AUTHENTICATION_USER_ACTION_TYPES.FETCH_AUTHENTICATION_USER_PROFILE_SUCCESS,
+        payload: null
+      });
+    }
+
     const responseData = yield call(authenticationService.fetchAuthenticationUserProfile);
 
     yield put({

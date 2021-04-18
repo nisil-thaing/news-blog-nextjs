@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react';
+import React, { useReducer } from 'react';
 import { EMPTY, from, Subject } from 'rxjs';
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
@@ -54,13 +54,12 @@ function reducer (
 function withLoginHandler (WrapperComponent) {
   // eslint-disable-next-line react/display-name
   return function (props) {
-    const { hideAuthenticationDialog } = useAuthenticationDialog();
+    const {
+      hideAuthenticationDialog,
+      fetchCredentialsUserProfile
+    } = useAuthenticationDialog();
     const [ state, dispatch ] = useReducer(reducer, INITIAL_STATE);
     const loginRequestHandler = debounce(handleLogin, 500);
-
-    useEffect(function () {
-      console.log({state});
-    }, [state]);
 
     function handleLogin (values) {
       const { email, password } = values;
@@ -75,7 +74,6 @@ function withLoginHandler (WrapperComponent) {
       from(authenticationService.requestToLogin(values))
         .pipe(
           catchError(function (errorDescription) {
-            console.log({errorDescription});
             dispatch({ type: ACTION_TYPES.REQUEST_TO_LOGIN_FAILURE, payload: errorDescription });
             return EMPTY;
           }),
@@ -86,7 +84,6 @@ function withLoginHandler (WrapperComponent) {
           })
         )
         .subscribe(function (result) {
-          console.log({result});
           if (result?.id_token) {
             dispatch({
               type: ACTION_TYPES.REQUEST_TO_LOGIN_SUCCESS,
@@ -94,6 +91,7 @@ function withLoginHandler (WrapperComponent) {
             });
             setCookie(COOKIE_KEYS.ACCESS_TOKEN, result.id_token);
             hideAuthenticationDialog();
+            fetchCredentialsUserProfile();
           }
         });
     }
