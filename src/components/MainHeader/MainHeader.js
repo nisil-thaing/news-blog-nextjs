@@ -1,6 +1,9 @@
 import React from 'react';
 
-import { Container } from './MainHeader.style';
+import Dropdown from 'react-bootstrap/Dropdown';
+
+import { Container, RightSideBarWrapper } from './MainHeader.style';
+import LazyImage from 'components/LazyImage/LazyImage';
 import { useAuthenticationDialog } from 'hocs/withAuthenticationPopup';
 
 import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
@@ -8,7 +11,8 @@ import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 function MainHeader () {
   const {
     isLoggedInState,
-    showAuthenticationDialog
+    showAuthenticationDialog,
+    credentialsUserProfile
   } = useAuthenticationDialog();
 
   function handleOpenLoginDialog (event) {
@@ -33,7 +37,21 @@ function MainHeader () {
         <div className="right-content">
           {
             isLoggedInState
-              ? null
+              ? <>
+                <RightSideBarWrapper>
+                  <Dropdown.Toggle variant="link" split={ false } className="p-0 border-0">
+                    <LazyImage
+                      src={ credentialsUserProfile?.avatar_url }
+                      ratio={ 1/1 }
+                      isRounded />
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                  </Dropdown.Menu>
+                </RightSideBarWrapper>
+              </>
               : <>
                 <button
                   type="button"
