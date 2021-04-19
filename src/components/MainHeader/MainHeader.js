@@ -45,10 +45,13 @@ function MainHeader () {
                       ratio={ 1/1 }
                       isRounded />
                   </Dropdown.Toggle>
-                  <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                    <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                  <Dropdown.Menu alignRight renderOnMount className="p-0">
+                    <Dropdown.Item className="p-0 backdrop" />
+                    <div className="pt-3 pb-3 dropdown-inner">
+                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
+                      <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
+                      <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
+                    </div>
                   </Dropdown.Menu>
                 </RightSideBarWrapper>
               </>

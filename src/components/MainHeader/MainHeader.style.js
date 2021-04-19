@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Dropdown from 'react-bootstrap/Dropdown';
 
-import { pixelsToRem } from 'styles/mixins.style';
+import { medias, pixelsToRem } from 'styles/mixins.style';
 
 export const Container = styled.nav`
   button:not(:disabled) {
@@ -20,4 +20,36 @@ export const RightSideBarWrapper = styled(Dropdown)`
       content: none;
     }
   }
+
+  ${medias.SMALL_SCREEN_DOWN`
+    .dropdown-menu {
+      position: fixed !important;
+      top: 0 !important;
+      left: unset !important;
+      right: 0 !important;
+      width: 50%;
+      height: 100%;
+      border: none;
+      border-radius: 0;
+      transform: none !important;
+      transition: all 0.3s ease 0s, visibility 0s linear 0.3s, z-index 0s linear 0.01s;
+      box-shadow: rgb(0 0 0 / 25%) 0px 4px 4px;
+      z-index: 1000;
+
+      .backdrop {
+        position: absolute;
+        top: 0;
+        right: 100%;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(255, 255, 255, .5);
+        z-index: 1;
+      }
+    }
+    
+    .dropdown-inner {
+      max-height: 100%;
+      overflow-y: auto;
+    }
+  `}
 `;

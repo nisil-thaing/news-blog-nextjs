@@ -20,7 +20,7 @@ function HomePage ({ demoData }) {
     console.log('Techinasia data: ', demoData);
   }, [ demoData ]);
 
-  return <Container className="d-flex flex-column justify-content-center align-items-center">
+  return <Container>
     <Head>
       <title>News Blog NextJs</title>
       <link rel="icon" href="/favicon.ico" />
