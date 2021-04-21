@@ -1,4 +1,5 @@
 import React from 'react';
+import debounce from 'lodash/debounce';
 
 import Dropdown from 'react-bootstrap/Dropdown';
 
@@ -14,6 +15,7 @@ function MainHeader () {
     showAuthenticationDialog,
     credentialsUserProfile
   } = useAuthenticationDialog();
+  const toggleShowingRightSidebarHandler = debounce(onToggleShowingRightSidebar, 500);
 
   function handleOpenLoginDialog (event) {
     event.stopPropagation();
@@ -23,6 +25,28 @@ function MainHeader () {
   function handleOpenRegistrationDialog (event) {
     event.stopPropagation();
     showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
+  }
+
+  function onToggleShowingRightSidebar (isShowing) {
+    const toggleClass = 'mb-sidebar-open',
+      bodyElement = document?.querySelector('body');
+
+    if (!bodyElement) {
+      return;
+    }
+
+    const bodyElementClasslist = bodyElement.classList || '',
+      isContainsToggleClass = bodyElementClasslist.contains(toggleClass);
+
+    switch (true) {
+      case isShowing && !isContainsToggleClass:
+        bodyElementClasslist.add(toggleClass);
+        break;
+      case !isShowing && isContainsToggleClass:
+        bodyElementClasslist.remove(toggleClass);
+        break;
+      default: break;
+    }
   }
 
   return <Container className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark w-100">
@@ -38,7 +62,7 @@ function MainHeader () {
           {
             isLoggedInState
               ? <>
-                <RightSideBarWrapper>
+                <RightSideBarWrapper onToggle={ toggleShowingRightSidebarHandler }>
                   <Dropdown.Toggle variant="link" split={ false } className="p-0 border-0">
                     <LazyImage
                       src={ credentialsUserProfile?.avatar_url }

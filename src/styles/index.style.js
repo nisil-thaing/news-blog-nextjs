@@ -1,6 +1,7 @@
 import { createGlobalStyle } from 'styled-components';
 
 import { COLORS, FONT_BASE, FONT_WEIGHTS } from 'constants/app-styles.constant';
+import { medias } from './mixins.style';
 
 const GlobalStyles = createGlobalStyle`
   /* Reboot - START */
@@ -16,6 +17,10 @@ const GlobalStyles = createGlobalStyle`
   body {
     color: ${ COLORS.BLACK };
     background-color: ${ COLORS.WHITE };
+
+    &.mb-sidebar-open {
+      overflow-y: hidden;
+    }
   }
   /* Reboot - END */
 
@@ -28,6 +33,14 @@ const GlobalStyles = createGlobalStyle`
     font-weight: ${ FONT_WEIGHTS.BLACK };
   }
   /* Typography - END */
+
+  ${medias.MEDIUM_SCREEN`
+    body {
+      &.mb-sidebar-open {
+        overflow-y: initial;
+      }
+    }
+  `}
 `;
 
 export default GlobalStyles;
