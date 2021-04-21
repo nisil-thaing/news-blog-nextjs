@@ -61,24 +61,49 @@ function MainHeader () {
         <div className="right-content">
           {
             isLoggedInState
-              ? <>
-                <RightSideBarWrapper onToggle={ toggleShowingRightSidebarHandler }>
-                  <Dropdown.Toggle variant="link" split={ false } className="p-0 border-0">
-                    <LazyImage
-                      src={ credentialsUserProfile?.avatar_url }
-                      ratio={ 1/1 }
-                      isRounded />
-                  </Dropdown.Toggle>
-                  <Dropdown.Menu alignRight renderOnMount className="p-0">
-                    <Dropdown.Item className="p-0 backdrop" />
-                    <div className="pt-3 pb-3 dropdown-inner">
-                      <Dropdown.Item href="#/action-1">Action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-2">Another action</Dropdown.Item>
-                      <Dropdown.Item href="#/action-3">Something else</Dropdown.Item>
-                    </div>
-                  </Dropdown.Menu>
-                </RightSideBarWrapper>
-              </>
+              ? <RightSideBarWrapper onToggle={ toggleShowingRightSidebarHandler }>
+                <Dropdown.Toggle variant="link" split={ false } className="p-0 border-0">
+                  <LazyImage
+                    src={ credentialsUserProfile?.avatar_url }
+                    ratio={ 1/1 }
+                    isRounded />
+                </Dropdown.Toggle>
+                <Dropdown.Menu alignRight renderOnMount className="p-0">
+                  <Dropdown.Item className="p-0 backdrop" />
+                  <div className="pt-3 pb-3 dropdown-inner">
+                    <Dropdown.Item
+                      as="div"
+                      className="d-flex flex-column align-items-center pt-3 pb-3 user-info"
+                      disabled>
+                      <div className="avatar">
+                        <LazyImage
+                          src={ credentialsUserProfile?.avatar_url }
+                          ratio={ 1/1 }
+                          isRounded />
+                      </div>
+                      <h6 className="mt-3 mb-0 text-dark">{ credentialsUserProfile?.display_name }</h6>
+                      {
+                        credentialsUserProfile?.email
+                          && <a
+                            href={ `mailto:${ credentialsUserProfile.email }` }
+                            className="mt-1 mb-0 text-secondary email">
+                            { credentialsUserProfile.email }
+                          </a>
+                      }
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      href="#/action-2"
+                      className="text-center">
+                      Another action
+                    </Dropdown.Item>
+                    <Dropdown.Item
+                      href="#/action-3"
+                      className="text-center">
+                      Something else
+                    </Dropdown.Item>
+                  </div>
+                </Dropdown.Menu>
+              </RightSideBarWrapper>
               : <>
                 <button
                   type="button"

@@ -21,13 +21,35 @@ export const RightSideBarWrapper = styled(Dropdown)`
     }
   }
 
+  .user-info {
+    .avatar {
+      width: ${ pixelsToRem(60) };
+    }
+
+    .email {
+      font-size: ${ pixelsToRem(12) };
+      line-height: 120%;
+    }
+  }
+
+  ${medias.EXTRA_SMALL_SCREEN`
+    .dropdown-menu {
+      width: 75%;
+    }
+  `}
+
+  ${medias.SMALL_SCREEN_ONLY`
+    .dropdown-menu {
+      width: 50%;
+    }
+  `}
+
   ${medias.SMALL_SCREEN_DOWN`
     .dropdown-menu {
       position: fixed !important;
       top: 0 !important;
       left: unset !important;
       right: 0 !important;
-      width: 50%;
       height: 100%;
       border: none;
       border-radius: 0;
