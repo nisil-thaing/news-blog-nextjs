@@ -1,12 +1,9 @@
 import styled from 'styled-components';
 
-export const Container = styled.section`
-  min-height: 100vh;
-`;
-
-export const MainWrapper = styled.main`
+export const Container = styled.main`
   flex: 1;
   padding: 5rem 0;
+  min-height: 100vh;
 
   .title {
     font-size: 4rem;

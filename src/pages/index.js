@@ -3,10 +3,7 @@ import Head from 'next/head';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
 
-import {
-  Container,
-  MainWrapper
-} from 'styles/pages/HomePage.style';
+import { Container } from 'styles/pages/HomePage.style';
 import MainLayout from 'containers/MainLayout/MainLayout';
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
@@ -20,13 +17,13 @@ function HomePage ({ demoData }) {
     console.log('Techinasia data: ', demoData);
   }, [ demoData ]);
 
-  return <Container>
+  return <>
     <Head>
       <title>News Blog NextJs</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
     <MainLayout header={ MainHeader } footer={ MainFooter }>
-      <MainWrapper className="d-flex flex-column justify-content-center align-items-center">
+      <Container className="d-flex flex-column justify-content-center align-items-center">
         <h1 className="m-0 text-center title">
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
@@ -61,9 +58,9 @@ function HomePage ({ demoData }) {
             <p>Instantly deploy your Next.js site to a public URL with Vercel.</p>
           </a>
         </div>
-      </MainWrapper>
+      </Container>
     </MainLayout>
-  </Container>;
+  </>;
 }
 
 export const getStaticProps = reduxWrapper.getStaticProps(async function ({ store }) {

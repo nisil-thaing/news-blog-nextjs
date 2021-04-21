@@ -25,7 +25,7 @@ function MainHeader () {
     showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
   }
 
-  return <Container className="navbar sticky-top navbar-expand-lg navbar-dark bg-dark w-100">
+  return <Container className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark w-100">
     <div className="container">
       <div className="d-flex justify-content-between align-items-center w-100">
         <div className="left-content">
