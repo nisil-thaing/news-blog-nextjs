@@ -74,6 +74,10 @@ function withAuthenticationPopup (WrapperComponent) {
       props.showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG);
     }
 
+    function handleSwitchingToLoginForm () {
+      props.showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG);
+    }
+
     return <LayoutContext.Provider value={ contextProps }>
       <WrapperComponent
         { ...props }
@@ -90,7 +94,7 @@ function withAuthenticationPopup (WrapperComponent) {
           }
           {
             props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG
-              && <RegistrationForm />
+              && <RegistrationForm onSwitchToLoginForm={ handleSwitchingToLoginForm } />
           }
         </AuthenticationDialog>
       }
