@@ -32,3 +32,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# version lock files
+package-lock.json
+yarn.lock
