@@ -8,17 +8,15 @@ import { LoadingWrapper } from 'components/AuthenticationDialog/AuthenticationDi
 import FormRenderer from './FormRenderer';
 
 const SCHEMA = Yup.object().shape({
-  email: Yup.string()
-    .email('Please input a valid email!')
-    .required('Please input a valid email!'),
-  password: Yup.string()
-    .required('Please choose a secure password!')
-});
-
-const INITIAL_DATA = {
-  email: '',
-  password: ''
-};
+    email: Yup.string()
+      .email('Please input a valid email!')
+      .required('Please input a valid email!'),
+    password: Yup.string()
+      .required('Please choose a secure password!')
+  }), INITIAL_DATA = {
+    email: '',
+    password: ''
+  };
 
 function LoginForm ({ isLoading, onSwitchToRegistrationForm, onSubmit }) {
   return <Container className="p-2 pl-md-4 pr-md-4">

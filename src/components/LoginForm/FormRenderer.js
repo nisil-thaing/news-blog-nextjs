@@ -4,11 +4,11 @@ import classnames from 'classnames';
 
 import { FormWrapper as Container } from './LoginForm.style';
 
-function FormRenderer ({ values, handleChange, handleBlur, handleSubmit }) {
+function FormRenderer ({ isValid, values, handleChange, handleBlur, handleSubmit }) {
   const [ isShowingPassword, toggleShowingPassword ] = useState(false);
   const isDisabledSubmission = useMemo(
-    () => !values.email || !values.password,
-    [ values.email, values.password ]
+    () => !isValid || !values.email || !values.password,
+    [ values, isValid ]
   );
 
   function handleToggleShowingPassword (event) {

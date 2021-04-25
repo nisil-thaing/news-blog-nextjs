@@ -1,12 +1,36 @@
 import React, { useState } from 'react';
 import { func } from 'prop-types';
-import classnames from 'classnames';
 
+import classnames from 'classnames';
+import * as Yup from 'yup';
+import { Formik } from 'formik';
 import { Accordion, Card } from 'react-bootstrap';
 
 import { Container } from './RegistrationForm.style';
+import FormRenderer from './FormRenderer';
 
-function RegistrationForm ({ onSwitchToLoginForm }) {
+const SCHEMA = Yup.object().shape({
+    firstName: Yup.string()
+      .required('Please input your first name!'),
+    lastName: Yup.string()
+      .required('Please input your last name!'),
+    email: Yup.string()
+      .email('Please input a valid email!')
+      .required('Please input a valid email!'),
+    password: Yup.string()
+      .required('Please choose a secure password!'),
+    passwordConfirmation: Yup.string()
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+      .required('Passwords must match')
+  }), INITIAL_DATA = {
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    passwordConfirmation: ''
+  };
+
+function RegistrationForm ({ onSwitchToLoginForm, onSubmit }) {
   const [ isShowingForm, updateWhetherFormIsShowing ] = useState(false);
 
   function onToggleShowingForm (activeKey) {
@@ -42,7 +66,7 @@ function RegistrationForm ({ onSwitchToLoginForm }) {
             as="button"
             className="d-block text-decoration-none w-100 p-0 border-0 btn btn-link"
             eventKey="0">
-            <p className="d-flex justify-content-center align-items-center text-uppercase text-secondary w-100 mb-0 span-note">
+            <p className="d-flex justify-content-center align-items-center text-uppercase text-dark w-100 mb-0 span-note">
               <i className="mr-2 bi bi-envelope" />
               Or sign up using email
               <div className="ml-2"><i className="d-block text-danger bi bi-arrow-right" /></div>
@@ -50,7 +74,14 @@ function RegistrationForm ({ onSwitchToLoginForm }) {
           </Accordion.Toggle>
         </Card.Header>
         <Accordion.Collapse eventKey="0">
-          <Card.Body>Hello! This is the body</Card.Body>
+          <Card.Body className="p-0">
+            <Formik
+              initialValues={ INITIAL_DATA }
+              validationSchema={ SCHEMA }
+              onSubmit={ onSubmit }>
+              { props => <FormRenderer { ...props } /> }
+            </Formik>
+          </Card.Body>
         </Accordion.Collapse>
       </Card>
     </Accordion>
@@ -67,7 +98,8 @@ function RegistrationForm ({ onSwitchToLoginForm }) {
 }
 
 RegistrationForm.propTypes = {
-  onSwitchToLoginForm: func
+  onSwitchToLoginForm: func,
+  onSubmit: func// .isRequired
 };
 
 export default RegistrationForm;

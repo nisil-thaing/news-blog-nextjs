@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 import { COLORS, FONT_WEIGHTS } from 'constants/app-styles.constant';
-import { pixelsToRem } from 'styles/mixins.style';
+import { pixelsToRem, placeholder } from 'styles/mixins.style';
 
 export const Container = styled.section`
   i {
@@ -42,6 +42,10 @@ export const FormWrapper = styled.form`
       outline: none;
       box-shadow: none;
     }
+
+    ${placeholder`
+      font-style: italic;
+    `}
   }
 
   .form-control {

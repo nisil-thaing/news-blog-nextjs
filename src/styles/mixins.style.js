@@ -72,3 +72,20 @@ export const spinner = keyframes`
     transform: rotate(360deg);
   }
 `;
+
+export function placeholder (cssTemplate) {
+  return css`
+    ::-webkit-input-placeholder {
+      ${ css(cssTemplate) };
+    }
+    :-moz-placeholder {
+      ${ css(cssTemplate) };
+    }
+    ::-moz-placeholder {
+      ${ css(cssTemplate) };
+    }
+    :-ms-input-placeholder {
+      ${ css(cssTemplate) };
+    }
+  `;
+}

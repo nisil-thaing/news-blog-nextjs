@@ -25,6 +25,11 @@ export const Container = styled(Modal)`
     }
   }
 
+  .modal-body {
+    max-height: 100%;
+    overflow-y: auto;
+  }
+
   ${medias.SMALL_SCREEN`
     .modal-dialog {
       margin: auto;
