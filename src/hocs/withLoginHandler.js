@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useReducer, useRef } from 'react';
 import { EMPTY, from, Subject } from 'rxjs';
 import { catchError, finalize, takeUntil } from 'rxjs/operators';
 import debounce from 'lodash.debounce';
@@ -54,6 +54,7 @@ function reducer (
 function withLoginHandler (WrapperComponent) {
   // eslint-disable-next-line react/display-name
   return function (props) {
+    const completionSubjectRef$ = useRef(null);
     const {
       hideAuthenticationDialog,
       fetchCredentialsUserProfile
@@ -61,14 +62,27 @@ function withLoginHandler (WrapperComponent) {
     const [ state, dispatch ] = useReducer(reducer, INITIAL_STATE);
     const loginRequestHandler = debounce(handleLogin, 500);
 
+    function unsubscribeLoginRequestHandle () {
+      if (!completionSubjectRef$.current) {
+        return false;
+      }
+
+      completionSubjectRef$.current.next();
+      completionSubjectRef$.current.complete();
+      completionSubjectRef$.current = null;
+
+      return true;
+    }
+
     function handleLogin (values) {
+      const isRecentlyCompleted = unsubscribeLoginRequestHandle();
       const { email, password } = values;
       
-      if (!email || !password) {
+      if (!email || !password || isRecentlyCompleted) {
         return;
       }
 
-      const completionSubject$ = new Subject();
+      completionSubjectRef$.current = new Subject();
       dispatch({ type: ACTION_TYPES.REQUEST_TO_LOGIN });
 
       from(authenticationService.requestToLogin(values))
@@ -77,10 +91,9 @@ function withLoginHandler (WrapperComponent) {
             dispatch({ type: ACTION_TYPES.REQUEST_TO_LOGIN_FAILURE, payload: errorDescription });
             return EMPTY;
           }),
-          takeUntil(completionSubject$),
+          takeUntil(completionSubjectRef$.current),
           finalize(function () {
-            completionSubject$.next();
-            completionSubject$.complete();
+            unsubscribeLoginRequestHandle();
           })
         )
         .subscribe(function (result) {
