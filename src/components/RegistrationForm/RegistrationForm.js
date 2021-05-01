@@ -69,7 +69,7 @@ function RegistrationForm ({ onSwitchToLoginForm, onSubmit }) {
             <p className="d-flex justify-content-center align-items-center text-uppercase text-dark w-100 mb-0 span-note">
               <i className="mr-2 bi bi-envelope" />
               Or sign up using email
-              <div className="ml-2"><i className="d-block text-danger bi bi-arrow-right" /></div>
+              <i className="d-block text-danger ml-2 bi bi-arrow-right" />
             </p>
           </Accordion.Toggle>
         </Card.Header>
