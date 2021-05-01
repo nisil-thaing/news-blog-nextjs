@@ -39,12 +39,17 @@ function mapDispatchToProps (dispatch) {
     fetchAuthenticationUserProfile = bindActionCreators(
       AUTHENTICATION_USER_ACTIONS.fetchAuthenticationUserProfile,
       dispatch
+    ),
+    clearCurrentUserCredentials = bindActionCreators(
+      AUTHENTICATION_USER_ACTIONS.clearCurrentUserCredentials,
+      dispatch
     );
 
   return {
     showAuthenticationDialog,
     hideAuthenticationDialog,
-    fetchAuthenticationUserProfile
+    fetchAuthenticationUserProfile,
+    clearCurrentUserCredentials
   };
 }
 
@@ -62,7 +67,8 @@ function withAuthenticationPopup (WrapperComponent) {
       credentialsUserProfile: props.credentialsUserProfile,
       showAuthenticationDialog: props.showAuthenticationDialog,
       hideAuthenticationDialog: props.hideAuthenticationDialog,
-      fetchCredentialsUserProfile: props.fetchAuthenticationUserProfile
+      fetchCredentialsUserProfile: props.fetchAuthenticationUserProfile,
+      logout: props.clearCurrentUserCredentials
     };
 
     useEffect(function () {

@@ -21,14 +21,14 @@ function* fetchAuthenticationUserProfileSaga () {
 
     const responseData = yield call(authenticationService.fetchAuthenticationUserProfile);
 
-    yield put({
+    return yield put({
       type: AUTHENTICATION_USER_ACTION_TYPES.FETCH_AUTHENTICATION_USER_PROFILE_SUCCESS,
       payload: responseData
     });
   } catch (err) {
     deleteCookie(COOKIE_KEYS.ACCESS_TOKEN);
 
-    yield all([
+    return yield all([
       put({
         type: AUTHENTICATION_USER_ACTION_TYPES.FETCH_AUTHENTICATION_USER_PROFILE_FAILURE,
         payload: err
@@ -48,9 +48,53 @@ function* fetchAuthenticationUserProfileSaga () {
   }
 }
 
+function* clearCurrentUserCredentialsSaga () {
+  try {
+    const accessToken = getCookie(COOKIE_KEYS.ACCESS_TOKEN);
+
+    if (!accessToken) {
+      return yield put({ type: AUTHENTICATION_USER_ACTION_TYPES.CLEAR_CURRENT_USER_CREDENTIALS_SUCCESS });
+    }
+
+    const responseData = yield call(authenticationService.requestToLogout);
+
+    if (!responseData?.success) {
+      throw new Error('Logout failed!');
+    }
+
+    deleteCookie(COOKIE_KEYS.ACCESS_TOKEN);
+    return yield put({ type: AUTHENTICATION_USER_ACTION_TYPES.CLEAR_CURRENT_USER_CREDENTIALS_SUCCESS });
+  } catch (err) {
+    return yield all([
+      put({
+        type: AUTHENTICATION_USER_ACTION_TYPES.CLEAR_CURRENT_USER_CREDENTIALS_FAILURE,
+        payload: err
+      }),
+      put({
+        type: UI_ACTION_TYPES.SHOW_TOAST_MESSAGE,
+        payload: {
+          type: TOAST_MESSAGE_TYPES.ERROR,
+          message: err.message,
+          position: {
+            vertical: TOAST_MESSAGE_POSITION.VERTICAL.TOP,
+            horizontal: TOAST_MESSAGE_POSITION.HORIZONTAL.RIGHT
+          }
+        }
+      })
+    ]);
+  }
+}
+
 function* authenticationUserSagas () {
   yield all([
-    takeLatest(AUTHENTICATION_USER_ACTION_TYPES.FETCH_AUTHENTICATION_USER_PROFILE, fetchAuthenticationUserProfileSaga)
+    takeLatest(
+      AUTHENTICATION_USER_ACTION_TYPES.FETCH_AUTHENTICATION_USER_PROFILE,
+      fetchAuthenticationUserProfileSaga
+    ),
+    takeLatest(
+      AUTHENTICATION_USER_ACTION_TYPES.CLEAR_CURRENT_USER_CREDENTIALS,
+      clearCurrentUserCredentialsSaga
+    )
   ]);
 }
 

@@ -17,5 +17,18 @@ export default createReducer(AUTHENTICATION_USER_INITIAL_STATE, {
     ...state,
     isFetching: false,
     error: action.payload
+  }),
+  [AUTHENTICATION_USER_ACTIONS.clearCurrentUserCredentials]: state => ({
+    ...state,
+    isFetching: true
+  }),
+  [AUTHENTICATION_USER_ACTIONS.clearCurrentUserCredentialsSuccess]: state => ({
+    ...state,
+    ...AUTHENTICATION_USER_INITIAL_STATE
+  }),
+  [AUTHENTICATION_USER_ACTIONS.clearCurrentUserCredentialsFailure]: (state, action) => ({
+    ...state,
+    isFetching: false,
+    error: action.payload
   })
 });
