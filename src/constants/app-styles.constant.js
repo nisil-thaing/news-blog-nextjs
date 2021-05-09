@@ -19,5 +19,5 @@ export const COLORS = {
   WHITE: '#FFFFFF',
   BLACK: '#182553',
   GRAY1: '#DBDBDB',
-  asdas: '#e8e8e8'
+  GRAY91: '#E8E8E8'
 };

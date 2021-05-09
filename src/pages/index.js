@@ -27,7 +27,7 @@ function HomePage ({ demoData }) {
       <Container className="container">
         <section className="row">
           <section className="col-12 col-md-8 left-content">
-            <section className="bg-secondary py-4 featured-content-wrapper">
+            <section className="py-4 py-md-0 featured-content-wrapper">
               <FeaturedSliderPostListing />
             </section>
           </section>

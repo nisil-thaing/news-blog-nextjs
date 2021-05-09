@@ -10,12 +10,13 @@ function FeaturedSliderPostListing () {
   const settings = {
     infinite: true,
     speed: 500,
-    slidesToShow: 1,
-    slidesToScroll: 1/* ,
+    arrows: false,
+    variableWidth: true,
+    mobileFirst: true/* ,
     autoplay: true */
   };
 
-  return <Container { ...settings } className="pl-3">
+  return <Container { ...settings } className="pl-4 pl-md-0">
     <PostCardContent />
     <PostCardContent />
     <PostCardContent />
