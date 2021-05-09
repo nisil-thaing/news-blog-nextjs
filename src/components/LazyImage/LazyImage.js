@@ -19,10 +19,12 @@ function LazyImageRenderer ({
 }) {
   const ratioString = `${ (1 / (ratio || 0)) * 100 }%`;
   const imageRef = useRef(null);
-  const imageLoaderRef = useRef(new Image());
+  const imageLoaderRef = useRef(null);
   let [ isImageLoaded, toggleIsImageLoaded ] = useState(!src);
 
   useEffect(function () {
+    imageLoaderRef.current = new Image();
+
     if (src) {
       window.addEventListener('scroll', handleScroll);
       registerLoadingImageEvents();
