@@ -1,22 +1,24 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { connect } from 'react-redux';
-import { END } from 'redux-saga';
 
 import { Container } from 'styles/pages/HomePage.style';
 import MainLayout from 'containers/MainLayout/MainLayout';
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
-import FeaturedSliderPostListing from 'components/pages/home-page/FeaturedSliderPostListing/FeaturedSliderPostListing';
+import FeaturedSliderPostListing
+  from 'components/pages/home-page/FeaturedSliderPostListing/FeaturedSliderPostListing';
 
 import reduxWrapper from 'store';
-import { DEMO_DATA_ACTIONS } from 'store/actions/demoDataAction';
-import { getDemoData } from 'store/selectors/demoDataSelector';
+import { mapArticleContentData } from 'utils/article.util';
+import ArticleService from 'services/articleService';
 
-function HomePage ({ demoData }) {
+const articleService = new ArticleService();
+
+function HomePage ({ featuredArticles }) {
   useEffect(function () {
-    console.log('Techinasia data: ', demoData);
-  }, [ demoData ]);
+    console.log('Techinasia data: ', featuredArticles);
+  }, [ featuredArticles ]);
 
   return <>
     <Head>
@@ -28,7 +30,7 @@ function HomePage ({ demoData }) {
         <section className="row">
           <section className="col-12 col-md-8 left-content">
             <section className="py-4 py-md-0 featured-content-wrapper">
-              <FeaturedSliderPostListing />
+              <FeaturedSliderPostListing data={ featuredArticles } />
             </section>
           </section>
           <section className="d-none d-md-block col-4 sticky-sidebar" />
@@ -38,19 +40,28 @@ function HomePage ({ demoData }) {
   </>;
 }
 
+// eslint-disable-next-line no-unused-vars
 export const getStaticProps = reduxWrapper.getStaticProps(async function ({ store }) {
-  if (!store.getState().demoData?.data) {
-    store.dispatch(DEMO_DATA_ACTIONS.fetchDemoData());
-    store.dispatch(END);
-  }
+  try {
+    const res = await articleService
+        .fetchSubscriberExclusiveArticles({ page: 1, itemsPerPage: 4 }),
+      featuredArticles = res.posts.map(post => mapArticleContentData(post));
 
-  await store.sagaTask.toPromise();
+    return {
+      props: { featuredArticles }
+    };
+  } catch (err) {
+    console.log('load data error: ', err);
+
+    return {
+      props: { featuredArticles: null }
+    };
+  }
 });
 
+// eslint-disable-next-line no-unused-vars
 function mapStateToProps (state) {
-  return {
-    demoData: getDemoData(state)
-  };
+  return {};
 }
 
 // eslint-disable-next-line no-unused-vars

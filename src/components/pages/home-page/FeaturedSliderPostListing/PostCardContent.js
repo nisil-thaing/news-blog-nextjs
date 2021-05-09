@@ -4,11 +4,11 @@ import Link from 'next/link';
 import { CardItemWrapper as Container } from './FeaturedSliderPostListing.style';
 import LazyImage from 'components/LazyImage/LazyImage';
 
-function PostCardContent () {
+function PostCardContent ({ data }) {
   return <Container className="d-flex flex-column">
     <Link href="/" passHref><a href="/">
       <LazyImage
-        src="https://cdn.techinasia.com/wp-content/uploads/2017/12/55476313_l-750x500.jpg"
+        src={ data?.featuredImage?.original || '' }
         ratio={ 16 / 9 } />
     </a></Link>
     <div></div>
