@@ -13,6 +13,7 @@ export const Container = styled.main`
   ${medias.MEDIUM_SCREEN`
     .featured-content-wrapper {
       background-color: transparent;
+      box-shadow: 0 2px 5px 1px rgb(0 0 0 / 5%);
     }
   `}
 `;

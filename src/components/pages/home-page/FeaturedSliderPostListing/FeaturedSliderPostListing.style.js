@@ -1,7 +1,11 @@
 import styled from 'styled-components';
 import Slider from 'react-slick';
 
-import { medias, pixelsToRem } from 'styles/mixins.style';
+import {
+  medias,
+  pixelsToRem,
+  textMultiLinesTruncate
+} from 'styles/mixins.style';
 
 export const Container = styled(Slider)`
   .slick-track {
@@ -26,7 +30,19 @@ export const CardItemWrapper = styled.section`
   .content-wrapper {
     h2 {
       font-size: ${ pixelsToRem(20) };
+      min-height: ${ pixelsToRem(48) };
       line-height: 120%;
+      ${ textMultiLinesTruncate(2) };
     }
   }
+
+  ${medias.MEDIUM_SCREEN`
+    .content-wrapper {
+      h2 {
+        font-size: ${ pixelsToRem(24) };
+        min-height: ${ pixelsToRem(64) };
+        line-height: 135%;
+      }
+    }
+  `}
 `;
