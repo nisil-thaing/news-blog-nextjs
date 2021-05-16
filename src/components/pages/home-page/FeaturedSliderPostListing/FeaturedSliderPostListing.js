@@ -13,8 +13,8 @@ function FeaturedSliderPostListing ({ data }) {
     speed: 500,
     arrows: false,
     variableWidth: true,
-    mobileFirst: true/* ,
-    autoplay: true */
+    mobileFirst: true,
+    autoplay: true
   };
 
   return <Container { ...settings } className="pl-4 pl-md-0">
@@ -26,7 +26,8 @@ function FeaturedSliderPostListing ({ data }) {
 
 FeaturedSliderPostListing.propTypes = {
   data: arrayOf(shape({
-    id: oneOfType([ string, number ])
+    id: oneOfType([ string, number ]),
+    title: string
   })).isRequired
 };
 

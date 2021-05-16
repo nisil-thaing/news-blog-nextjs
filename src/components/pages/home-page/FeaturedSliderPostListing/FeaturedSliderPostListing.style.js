@@ -22,4 +22,11 @@ export const Container = styled(Slider)`
   `}
 `;
 
-export const CardItemWrapper = styled.section``;
+export const CardItemWrapper = styled.section`
+  .content-wrapper {
+    h2 {
+      font-size: ${ pixelsToRem(20) };
+      line-height: 120%;
+    }
+  }
+`;
