@@ -3,8 +3,20 @@ export function mapArticleContentData (data) {
     return null;
   }
 
-  const { id, type, title, status, slug, link, content, featured_image } = data;
-  const featuredImage = mapImageContentData(featured_image);
+  const {
+    id,
+    type,
+    title,
+    status,
+    slug,
+    link,
+    content,
+    read_time: timeToReadInMinutes,
+    featured_image,
+    modified_gmt: updatedAt
+  } = data;
+  const author = mapAuthorContentData(data.author),
+    featuredImage = mapImageContentData(featured_image);
 
   return {
     id,
@@ -14,8 +26,27 @@ export function mapArticleContentData (data) {
     slug,
     link,
     content,
-    featuredImage
+    author,
+    timeToReadInMinutes,
+    featuredImage,
+    updatedAt
   };
+}
+
+export function mapAuthorContentData (data) {
+  if (!data) {
+    return null;
+  }
+
+  const {
+    id,
+    avatar_url: avatarUrl,
+    author_url: url,
+    display_name: displayName
+  } = data;
+  const slug = url.replace('https://www.techinasia.com/profile/', '');
+
+  return { id, avatarUrl, slug, displayName };
 }
 
 export function mapImageContentData (data) {

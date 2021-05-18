@@ -27,7 +27,9 @@ function FeaturedSliderPostListing ({ data }) {
 FeaturedSliderPostListing.propTypes = {
   data: arrayOf(shape({
     id: oneOfType([ string, number ]),
-    title: string
+    title: string,
+    updatedAt: string,
+    timeToReadInMinutes: number
   })).isRequired
 };
 
