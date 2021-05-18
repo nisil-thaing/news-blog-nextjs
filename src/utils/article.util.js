@@ -11,6 +11,7 @@ export function mapArticleContentData (data) {
     slug,
     link,
     content,
+    seo,
     read_time: timeToReadInMinutes,
     featured_image,
     modified_gmt: updatedAt
@@ -26,6 +27,7 @@ export function mapArticleContentData (data) {
     slug,
     link,
     content,
+    description: seo?.description || '',
     author,
     timeToReadInMinutes,
     featuredImage,

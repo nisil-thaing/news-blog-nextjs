@@ -27,6 +27,9 @@ function PostCardContent ({ data }) {
           updatedAt={ data.updatedAt }
           timeToReadInMinutes={ data.timeToReadInMinutes } />
       </div>
+      <div
+        className="mt-3 text-secondary short-description"
+        dangerouslySetInnerHTML={{ __html: data.description }} />
     </div>
   </Container>;
 }

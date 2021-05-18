@@ -29,6 +29,7 @@ FeaturedSliderPostListing.propTypes = {
     id: oneOfType([ string, number ]),
     title: string,
     updatedAt: string,
+    description: string,
     timeToReadInMinutes: number
   })).isRequired
 };
