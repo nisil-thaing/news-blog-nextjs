@@ -1,0 +1,28 @@
+import React from 'react';
+import renderer from 'react-test-renderer';
+
+import LazyImage from './LazyImage';
+
+const SAMPLE_DATA = {
+  src: 'https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-9/42872933_1871916762904621_8392319564708315136_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=e3f864&_nc_ohc=WRdbHTLltPkAX-Vp8_V&_nc_ht=scontent-hkg4-1.xx&oh=f24bbe6504b76455f96e311b895c4a1e&oe=60C86BA1',
+  ratio: 16 / 9
+};
+
+test('LazyImage should return 16x9 ratio image', () => {
+  const component = renderer.create(
+    <LazyImage { ...SAMPLE_DATA } />
+  );
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+});
+
+test('LazyImage should return circle image', () => {
+  const component = renderer.create(
+    <LazyImage
+      src="https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg"
+      ratio={ 1 }
+      isRounded />
+  );
+  let tree = component.toJSON();
+  expect(tree).toMatchSnapshot();
+});
