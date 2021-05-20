@@ -1,5 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
+import { cleanup, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import LazyImage from './LazyImage';
 
@@ -8,21 +10,30 @@ const SAMPLE_DATA = {
   ratio: 16 / 9
 };
 
-test('LazyImage should return 16x9 ratio image', () => {
-  const component = renderer.create(
-    <LazyImage { ...SAMPLE_DATA } />
-  );
-  let tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
-});
+describe('LazyImage component', function () {
+  afterEach(cleanup);
 
-test('LazyImage should return circle image', () => {
-  const component = renderer.create(
-    <LazyImage
-      src="https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg"
-      ratio={ 1 }
-      isRounded />
-  );
-  let tree = component.toJSON();
-  expect(tree).toMatchSnapshot();
+  it('Should return 16x9 ratio image\'s snapshot', () => {
+    const component = renderer.create(
+      <LazyImage { ...SAMPLE_DATA } />
+    );
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+  
+  it('Should return circle image\'s snapshot', () => {
+    const component = renderer.create(
+      <LazyImage
+        src="https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg"
+        ratio={ 1 }
+        isRounded />
+    );
+    let tree = component.toJSON();
+    expect(tree).toMatchSnapshot();
+  });
+
+  it('Should return a default component with "loading" class', () => {
+    const { container } = render(<LazyImage { ...SAMPLE_DATA } />);
+    expect(container.firstChild.firstChild).toHaveClass('loading');
+  });
 });
