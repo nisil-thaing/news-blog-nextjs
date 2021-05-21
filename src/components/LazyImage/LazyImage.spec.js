@@ -13,7 +13,7 @@ const SAMPLE_DATA = {
 describe('LazyImage component', function () {
   afterEach(cleanup);
 
-  it('Should return 16x9 ratio image\'s snapshot', () => {
+  it('Should return 16x9 ratio image\'s snapshot', function () {
     const component = renderer.create(
       <LazyImage { ...SAMPLE_DATA } />
     );
@@ -21,7 +21,7 @@ describe('LazyImage component', function () {
     expect(tree).toMatchSnapshot();
   });
   
-  it('Should return circle image\'s snapshot', () => {
+  it('Should return circle image\'s snapshot', function () {
     const component = renderer.create(
       <LazyImage
         src="https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg"
@@ -32,7 +32,7 @@ describe('LazyImage component', function () {
     expect(tree).toMatchSnapshot();
   });
 
-  it('Should return a default component with "loading" class', () => {
+  it('Should return a default component with "loading" class', function () {
     const { container } = render(<LazyImage { ...SAMPLE_DATA } />);
     expect(container.firstChild.firstChild).toHaveClass('loading');
   });
