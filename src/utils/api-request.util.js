@@ -25,20 +25,24 @@ export function setCookie (cname, cvalue, exSecs) {
 }
 
 export function getCookie (cname) {
+  if (typeof document !== 'object') {
+    return '';
+  }
+
   const name = `${ cname }=`;
   const decodedCookie = decodeURIComponent(document.cookie);
   const decodedCookieParts = decodedCookie.split(';');
   const foundKeyValuePair = decodedCookieParts
     .find(decodedCookiePart => decodedCookiePart && decodedCookiePart.trim().startsWith(name));
   
-  if (foundKeyValuePair) {
-    return foundKeyValuePair
-      .split('=')
-      .slice(1)
-      .join('=');
+  if (!foundKeyValuePair) {
+    return '';    
   }
 
-  return '';
+  return foundKeyValuePair
+    .split('=')
+    .slice(1)
+    .join('=');
 }
 
 export function deleteCookie (cname) {

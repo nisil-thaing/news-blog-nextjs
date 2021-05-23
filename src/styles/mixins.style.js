@@ -89,3 +89,13 @@ export function placeholder (cssTemplate) {
     }
   `;
 }
+
+export function textMultiLinesTruncate (numOfLines) {
+  return css`
+    display: -webkit-box;
+    -webkit-line-clamp: ${ numOfLines };
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  `;
+}
