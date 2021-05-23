@@ -10,7 +10,7 @@ export const Container = styled.div`
     width: 100%;
     padding-top: ${ props => props.ratio || '100%' };
     opacity: 1;
-    transition: opacity 0.1s ease-in-out;
+    transition: opacity 0.5s ease-in-out;
     background-color: ${ COLORS.GRAY1 };
     overflow: hidden;
 

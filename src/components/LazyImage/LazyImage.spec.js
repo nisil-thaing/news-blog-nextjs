@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { cleanup, render } from '@testing-library/react';
+import { cleanup, fireEvent, render, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import LazyImage from './LazyImage';
@@ -35,5 +35,24 @@ describe('LazyImage component', function () {
   it('Should return a default component with "loading" class', function () {
     const { container } = render(<LazyImage { ...SAMPLE_DATA } />);
     expect(container.firstChild.firstChild).toHaveClass('loading');
+  });
+
+  xit('Should remove "loading" class in case of image to be displayed in the view', async function () {
+    const { container } = render(<LazyImage { ...SAMPLE_DATA } />);
+    fireEvent.scroll(window);
+
+    await waitFor(function () {
+      expect(container.firstChild.firstChild).not.toHaveClass('loading');
+    });
+  });
+
+  xit('Should remove "loading" class in case of image to be displayed in the view, and "document.documentElement.clientHeight" to be called instead of "window.innerHeight"', async function () {
+    const { container } = render(<LazyImage { ...SAMPLE_DATA } />);
+    window.innerHeight = 0;
+    fireEvent.scroll(window);
+
+    await waitFor(function () {
+      expect(container.firstChild.firstChild).not.toHaveClass('loading');
+    });
   });
 });

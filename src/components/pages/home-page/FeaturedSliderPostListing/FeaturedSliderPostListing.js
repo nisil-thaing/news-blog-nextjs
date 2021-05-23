@@ -1,5 +1,12 @@
 import React from 'react';
-import { arrayOf, number, oneOfType, shape, string } from 'prop-types';
+import {
+  arrayOf,
+  number,
+  oneOfType,
+  shape,
+  string
+} from 'prop-types';
+import { isMobileOnly } from 'react-device-detect';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -10,7 +17,9 @@ import PostCardContent from './PostCardContent';
 function FeaturedSliderPostListing ({ data }) {
   const settings = {
     infinite: true,
+    lazyLoad: !isMobileOnly,
     speed: 500,
+    autoplaySpeed: 5000,
     arrows: false,
     variableWidth: true,
     mobileFirst: true,

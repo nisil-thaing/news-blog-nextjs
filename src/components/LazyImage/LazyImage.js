@@ -14,10 +14,10 @@ function checkWhetherElementInViewport (ele) {
 
 function LazyImageRenderer ({
   src,
-  ratio,
+  ratio = 1,
   isRounded
 }) {
-  const ratioString = `${ (1 / (ratio || 0)) * 100 }%`;
+  const ratioString = `${ (1 / ratio) * 100 }%`;
   const imageRef = useRef(null);
   const imageLoaderRef = useRef(null);
   let [ isImageLoaded, toggleIsImageLoaded ] = useState(!src);
