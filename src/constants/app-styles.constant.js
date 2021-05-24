@@ -18,5 +18,6 @@ export const RESPONSIVE_BREAKPOINTS = {
 export const COLORS = {
   WHITE: '#FFFFFF',
   BLACK: '#182553',
-  GRAY1: '#DBDBDB'
+  GRAY1: '#DBDBDB',
+  GRAY91: '#E8E8E8'
 };

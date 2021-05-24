@@ -12,8 +12,9 @@ import { AUTHENTICATION_DIALOG_TYPES } from 'store/states/uiState';
 function MainHeader () {
   const {
     isLoggedInState,
+    credentialsUserProfile,
     showAuthenticationDialog,
-    credentialsUserProfile
+    logout
   } = useAuthenticationDialog();
   const toggleShowingRightSidebarHandler = debounce(onToggleShowingRightSidebar, 500);
 
@@ -47,6 +48,12 @@ function MainHeader () {
         break;
       default: break;
     }
+  }
+
+  function handleLogoutRequest (event) {
+    event.stopPropagation();
+
+    return logout && logout();
   }
 
   return <Container className="navbar fixed-top navbar-expand-lg navbar-dark bg-dark w-100">
@@ -92,14 +99,11 @@ function MainHeader () {
                       }
                     </Dropdown.Item>
                     <Dropdown.Item
-                      href="#/action-2"
-                      className="text-center">
-                      Another action
-                    </Dropdown.Item>
-                    <Dropdown.Item
-                      href="#/action-3"
-                      className="text-center">
-                      Something else
+                      as="button"
+                      type="button"
+                      className="btn btn-link text-center"
+                      onClick={ handleLogoutRequest }>
+                      Logout
                     </Dropdown.Item>
                   </div>
                 </Dropdown.Menu>
