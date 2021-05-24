@@ -40,8 +40,7 @@ function HomePage ({ featuredArticles }) {
   </>;
 }
 
-// eslint-disable-next-line no-unused-vars
-export const getStaticProps = reduxWrapper.getStaticProps(async function ({ store }) {
+export const getStaticProps = reduxWrapper.getStaticProps(async function ({ _store }) {
   try {
     const res = await articleService
         .fetchSubscriberExclusiveArticles({ page: 1, itemsPerPage: 4 }),
@@ -59,13 +58,12 @@ export const getStaticProps = reduxWrapper.getStaticProps(async function ({ stor
   }
 });
 
-// eslint-disable-next-line no-unused-vars
-function mapStateToProps (state) {
+
+function mapStateToProps (_state) {
   return {};
 }
 
-// eslint-disable-next-line no-unused-vars
-function mapDispatchToProps (dispatch) {
+function mapDispatchToProps (_dispatch) {
   return {};
 }
 

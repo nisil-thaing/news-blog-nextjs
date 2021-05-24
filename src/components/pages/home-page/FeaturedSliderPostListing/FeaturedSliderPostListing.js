@@ -15,9 +15,10 @@ import { Container } from './FeaturedSliderPostListing.style';
 import PostCardContent from './PostCardContent';
 
 function FeaturedSliderPostListing ({ data }) {
+  const isLazyLoad = !isMobileOnly;
   const settings = {
     infinite: true,
-    lazyLoad: !isMobileOnly,
+    lazyLoad: isLazyLoad,
     speed: 500,
     autoplaySpeed: 5000,
     arrows: false,
@@ -28,7 +29,9 @@ function FeaturedSliderPostListing ({ data }) {
 
   return <Container { ...settings } className="pl-4 pl-md-0">
     {
-      data.map(item => <PostCardContent key={ item.id } data={ item } />)
+      data.map(item => <PostCardContent
+        key={ item.id }
+        data={ item } />)
     }
   </Container>;
 }
