@@ -10,7 +10,8 @@
     "build-storybook": "build-storybook",
     "test": "jest -u",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
@@ -56,10 +57,15 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.23.1",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "husky": ">=6",
     "jest": "^26.6.3",
+    "lint-staged": ">=10",
     "react-test-renderer": "^17.0.2",
     "redux-devtools": "^3.7.0",
     "redux-devtools-extension": "^2.13.9",
     "source-map": "^0.7.3"
+  },
+  "lint-staged": {
+    "*.js": "eslint --cache --fix"
   }
 }
