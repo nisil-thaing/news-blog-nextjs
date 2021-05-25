@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Head from 'next/head';
 import { connect } from 'react-redux';
+import { END } from 'redux-saga';
 
 import { Container } from 'styles/pages/HomePage.style';
 import MainLayout from 'containers/MainLayout/MainLayout';
@@ -12,6 +13,7 @@ import FeaturedSliderPostListing
 import reduxWrapper from 'store';
 import { mapArticleContentData } from 'utils/article.util';
 import ArticleService from 'services/articleService';
+import { ARTICLE_FEEDS_ACTIONS } from 'store/actions/pages/home-page/articleFeedsAction';
 
 const articleService = new ArticleService();
 
@@ -40,8 +42,11 @@ function HomePage ({ featuredArticles }) {
   </>;
 }
 
-export const getStaticProps = reduxWrapper.getStaticProps(async function ({ _store }) {
+export const getServerSideProps = reduxWrapper.getServerSideProps(async function ({ store }) {
   try {
+    store.dispatch(ARTICLE_FEEDS_ACTIONS.fetchArticleFeedsData(1, 10));
+    store.dispatch(END);
+
     const res = await articleService
         .fetchSubscriberExclusiveArticles({ page: 1, itemsPerPage: 4 }),
       featuredArticles = res.posts.map(post => mapArticleContentData(post));
@@ -55,6 +60,8 @@ export const getStaticProps = reduxWrapper.getStaticProps(async function ({ _sto
     return {
       props: { featuredArticles: null }
     };
+  } finally {
+    await store.sagaTask.toPromise();
   }
 });
 

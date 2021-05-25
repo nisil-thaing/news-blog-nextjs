@@ -3,7 +3,21 @@ export const COOKIE_KEYS = {
 };
 
 export function getDataBodyFromResponseToData (responseData) {
-  return responseData.data;
+  return responseData?.data || {};
+}
+
+export function mapDataWithPaginationFromDataDataResponse (responseData, dataKey = 'data') {
+  const dataBody = getDataBodyFromResponseToData(responseData);
+  const {
+    total: totalItems,
+    per_page: itemsPerPage,
+    current_page: currentPage,
+    total_pages: totalPages
+  } = dataBody;
+  const pagingInfo = { totalItems, itemsPerPage, currentPage, totalPages },
+    data = dataBody[dataKey] || [];
+
+  return { data, pagingInfo };
 }
 
 export function mapErrorResponseToErrorObject (error, functionName = '') {

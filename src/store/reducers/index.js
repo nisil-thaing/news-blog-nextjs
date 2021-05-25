@@ -1,16 +1,20 @@
 import { combineReducers } from 'redux';
-// import { connectRouter } from 'connected-react-router';
 
 import demoDataReducer from './demoDataReducer';
 import uiReducer from './uiReducer';
 import authenticationUserReducer from './authenticationUserReducer';
+import homePageReducers from './pages/home-page';
 
-function createRootReducer (/* history */) {
+const pageReducers = combineReducers({
+  homePage: homePageReducers
+});
+
+function createRootReducer () {
   return combineReducers({
-    // router: connectRouter(history),
     demoData: demoDataReducer,
     ui: uiReducer,
-    authenticationUser: authenticationUserReducer
+    authenticationUser: authenticationUserReducer,
+    pages: pageReducers
   });
 }
 
