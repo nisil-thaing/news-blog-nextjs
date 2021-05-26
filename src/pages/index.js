@@ -9,6 +9,7 @@ import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
 import FeaturedSliderPostListing
   from 'components/pages/home-page/FeaturedSliderPostListing/FeaturedSliderPostListing';
+import NewsFeed from 'components/pages/home-page/NewsFeed/NewsFeed';
 
 import reduxWrapper from 'store';
 import { mapArticleContentData } from 'utils/article.util';
@@ -33,6 +34,9 @@ function HomePage ({ featuredArticles }) {
           <section className="col-12 col-md-8 left-content">
             <section className="py-4 py-md-0 featured-content-wrapper">
               <FeaturedSliderPostListing data={ featuredArticles } />
+            </section>
+            <section>
+              <NewsFeed />
             </section>
           </section>
           <section className="d-none d-md-block col-4 sticky-sidebar" />

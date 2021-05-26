@@ -6,7 +6,6 @@ import {
   shape,
   string
 } from 'prop-types';
-import { isMobileOnly } from 'react-device-detect';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -15,10 +14,8 @@ import { Container } from './FeaturedSliderPostListing.style';
 import PostCardContent from './PostCardContent';
 
 function FeaturedSliderPostListing ({ data }) {
-  const isLazyLoad = !isMobileOnly;
   const settings = {
     infinite: true,
-    lazyLoad: isLazyLoad,
     speed: 500,
     autoplaySpeed: 5000,
     arrows: false,
