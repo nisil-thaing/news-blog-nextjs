@@ -14,6 +14,7 @@ export function mapArticleContentData (data) {
     seo,
     read_time: timeToReadInMinutes,
     featured_image,
+    categories,
     modified_gmt: updatedAt
   } = data;
   const author = mapAuthorContentData(data.author),
@@ -31,6 +32,7 @@ export function mapArticleContentData (data) {
     author,
     timeToReadInMinutes,
     featuredImage,
+    categories,
     updatedAt
   };
 }

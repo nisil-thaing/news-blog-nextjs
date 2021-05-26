@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import { connect } from 'react-redux';
 import { END } from 'redux-saga';
@@ -15,14 +15,11 @@ import reduxWrapper from 'store';
 import { mapArticleContentData } from 'utils/article.util';
 import ArticleService from 'services/articleService';
 import { ARTICLE_FEEDS_ACTIONS } from 'store/actions/pages/home-page/articleFeedsAction';
+import { getArticleFeedsData } from 'store/selectors/pages/home-page/articleFeedsSelector';
 
 const articleService = new ArticleService();
 
-function HomePage ({ featuredArticles }) {
-  useEffect(function () {
-    console.log('Techinasia data: ', featuredArticles);
-  }, [ featuredArticles ]);
-
+function HomePage ({ featuredArticles, newsFeed }) {
   return <>
     <Head>
       <title>Home - News Blog NextJs</title>
@@ -36,7 +33,7 @@ function HomePage ({ featuredArticles }) {
               <FeaturedSliderPostListing data={ featuredArticles } />
             </section>
             <section>
-              <NewsFeed />
+              <NewsFeed data={ newsFeed } />
             </section>
           </section>
           <section className="d-none d-md-block col-4 sticky-sidebar" />
@@ -70,8 +67,10 @@ export const getServerSideProps = reduxWrapper.getServerSideProps(async function
 });
 
 
-function mapStateToProps (_state) {
-  return {};
+function mapStateToProps (state) {
+  const newsFeed = getArticleFeedsData(state);
+
+  return { newsFeed };
 }
 
 function mapDispatchToProps (_dispatch) {
