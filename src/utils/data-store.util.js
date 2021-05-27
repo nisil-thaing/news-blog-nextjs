@@ -1,6 +1,6 @@
 export const DEFAULT_PAGING_INFO = {
   totalItems: 0,
-  itemsPerPage: 0,
+  itemsPerPage: 10,
   currentPage: 1,
   totalPages: 0
 };

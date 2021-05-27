@@ -12,9 +12,7 @@ export const ARTICLE_FEEDS_ACTION_TYPES = {
 export const ARTICLE_FEEDS_ACTIONS = {
   fetchArticleFeedsData: createAction(
     ARTICLE_FEEDS_ACTION_TYPES.FETCH_ARTICLE_FEEDS_DATA,
-    (page = 1, itemsPerPage = 10) => ({
-      payload: { page, itemsPerPage }
-    })
+    isLoadMore => ({ payload: { isLoadMore } })
   ),
   fetchArticleFeedsDataSuccess: createAction(
     ARTICLE_FEEDS_ACTION_TYPES.FETCH_ARTICLE_FEEDS_DATA_SUCCESS,
