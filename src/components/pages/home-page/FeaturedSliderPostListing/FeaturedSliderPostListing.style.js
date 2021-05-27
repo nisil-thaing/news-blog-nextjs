@@ -18,6 +18,12 @@ export const Container = styled(Slider)`
     padding-right: ${ pixelsToRem(24) };
   }
 
+  ${medias.SMALL_SCREEN`
+    .slick-slide {
+      width: calc(100vmin - ${ pixelsToRem(72) });
+    }
+  `}
+
   ${medias.MEDIUM_SCREEN`
     .slick-slide {
       width: 100%;
