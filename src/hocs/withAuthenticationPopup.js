@@ -53,8 +53,8 @@ function mapDispatchToProps (dispatch) {
   };
 }
 
-const LayoutContext = createContext(),
-  LoginFormRenderer = withLoginHandler(LoginForm);
+export const LayoutContext = createContext();
+const LoginFormRenderer = withLoginHandler(LoginForm);
 
 function withAuthenticationPopup (WrapperComponent) {
   const enhance = compose(connect(mapStateToProps, mapDispatchToProps));

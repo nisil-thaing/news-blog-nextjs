@@ -1,6 +1,7 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
 import { cleanup, getByTestId, render } from '@testing-library/react';
+import '@testing-library/jest-dom';
 
 import MainLayout from './MainLayout';
 
@@ -23,13 +24,13 @@ describe('MainLayout component', function () {
 
   it('Should showing minimize required props of MainLayout\'s UI with page body', function () {
     const { container } = render(<MainLayout>{ SAMPLE_DATA.children }</MainLayout>);
-    expect(getByTestId(container, 'pageBody')).not.toBe(null);
+    expect(getByTestId(container, 'pageBody')).toBeInTheDocument();
   });
 
   it('Should showing full of props of MainLayout\'s UI with page header and footer', function () {
     const { container } = render(<MainLayout { ...SAMPLE_DATA } />);
-    expect(getByTestId(container, 'pageBody')).not.toBe(null);
-    expect(getByTestId(container, 'pageHeader')).not.toBe(null);
-    expect(getByTestId(container, 'pageFooter')).not.toBe(null);
+    expect(getByTestId(container, 'pageBody')).toBeInTheDocument();
+    expect(getByTestId(container, 'pageHeader')).toBeInTheDocument();
+    expect(getByTestId(container, 'pageFooter')).toBeInTheDocument();
   });
 });
