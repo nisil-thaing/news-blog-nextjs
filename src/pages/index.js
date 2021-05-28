@@ -6,6 +6,7 @@ import InfiniteScroll from 'react-infinite-scroller';
 import { isMobileOnly } from 'react-device-detect';
 
 import { Container } from 'styles/pages/HomePage.style';
+import withAuthenticationPopup from 'hocs/withAuthenticationPopup';
 import MainLayout from 'containers/MainLayout/MainLayout';
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
@@ -24,6 +25,8 @@ import {
 } from 'store/selectors/pages/home-page/articleFeedsSelector';
 
 const articleService = new ArticleService();
+
+const MainLayoutWithAuthenticationPopup = withAuthenticationPopup(MainLayout);
 
 function HomePage ({
   featuredArticles,
@@ -45,7 +48,7 @@ function HomePage ({
       <title>Home - News Blog NextJs</title>
       <link rel="icon" href="/favicon.ico" />
     </Head>
-    <MainLayout header={ MainHeader } footer={ MainFooter }>
+    <MainLayoutWithAuthenticationPopup header={ MainHeader } footer={ MainFooter }>
       <Container className="container">
         <section className="row">
           <section className="col-12 col-md-8 left-content">
@@ -55,7 +58,7 @@ function HomePage ({
             <section>
               <InfiniteScroll
                 className="infinity-feeds-wrapper"
-                pageStart={ 0 }
+                pageStart={ 1 }
                 threshold={ isMobileOnly ? 1200 : 1800 }
                 loadMore={ handleLoadMoreNewsFeed }
                 hasMore={ couldNewsFeedBeLoadedMore }
@@ -71,7 +74,7 @@ function HomePage ({
           <section className="d-none d-md-block col-4 sticky-sidebar" />
         </section>
       </Container>
-    </MainLayout>
+    </MainLayoutWithAuthenticationPopup>
   </>;
 }
 

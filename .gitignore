@@ -34,6 +34,7 @@ yarn-error.log*
 
 # vercel
 .vercel
+.vscode/**/*.*
 
 # version lock files
 package-lock.json

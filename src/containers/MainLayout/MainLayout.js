@@ -1,8 +1,7 @@
 import React from 'react';
-import { func, node, oneOfType, string } from 'prop-types';
+import { func, node } from 'prop-types';
 
 import { Container } from './MainLayout.style';
-import withAuthenticationPopup from 'hocs/withAuthenticationPopup';
 
 function MainLayout ({ children, ...restProps }) {
   return <Container className="d-flex flex-column justify-content-center align-items-center">
@@ -13,9 +12,9 @@ function MainLayout ({ children, ...restProps }) {
 }
 
 MainLayout.propTypes = {
-  header: oneOfType([ func, string ]),
+  header: func,
   children: node.isRequired,
-  footer: oneOfType([ func, string ])
+  footer: func
 };
 
-export default withAuthenticationPopup(MainLayout);
+export default MainLayout;
