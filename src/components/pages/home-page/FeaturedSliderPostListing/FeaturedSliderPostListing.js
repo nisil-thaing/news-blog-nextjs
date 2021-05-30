@@ -1,19 +1,14 @@
-import React from 'react';
-import {
-  arrayOf,
-  number,
-  oneOfType,
-  shape,
-  string
-} from 'prop-types';
+import React, { useState } from 'react';
+import { isMobileOnly } from 'react-device-detect';
 
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 
 import { Container } from './FeaturedSliderPostListing.style';
-import PostCardContent from './PostCardContent';
+import ArticleCard from './ArticleCard';
 
 function FeaturedSliderPostListing ({ data }) {
+  const [ isRenderHighResolutionImage, toggleRenderingHighResolutionImage ] = useState(false);
   const settings = {
     infinite: true,
     speed: 500,
@@ -24,23 +19,24 @@ function FeaturedSliderPostListing ({ data }) {
     autoplay: true
   };
 
+  useState(function () {
+    const shouldToggleRenderingHighResolutionImage = !isMobileOnly;
+
+    if (shouldToggleRenderingHighResolutionImage) {
+      toggleRenderingHighResolutionImage(true);
+    }
+
+    return;
+  }, []);
+
   return <Container { ...settings } className="pl-4 pl-md-0">
     {
-      data.map(item => <PostCardContent
+      data.map(item => <ArticleCard
         key={ item.id }
-        data={ item } />)
+        data={ item }
+        isRenderHighResolutionImage={ isRenderHighResolutionImage } />)
     }
   </Container>;
 }
-
-FeaturedSliderPostListing.propTypes = {
-  data: arrayOf(shape({
-    id: oneOfType([ string, number ]),
-    title: string,
-    updatedAt: string,
-    description: string,
-    timeToReadInMinutes: number
-  })).isRequired
-};
 
 export default FeaturedSliderPostListing;
