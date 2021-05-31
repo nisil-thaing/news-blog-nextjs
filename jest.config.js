@@ -1,4 +1,8 @@
 module.exports = {
   verbose: true,
-  moduleDirectories: ['node_modules', 'src']
+  setupFilesAfterEnv: ['./src/setupTests.js'],
+  moduleDirectories: ['node_modules', 'src'],
+  moduleNameMapper: {
+    '\\.(css|less)$': 'identity-obj-proxy'
+  }
 };
