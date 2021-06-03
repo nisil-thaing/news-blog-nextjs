@@ -19,8 +19,6 @@ export const ArticleCardWrapper = styled.article`
     line-height: 140%;
     list-style: none;
     padding: 0;
-    max-height: ${ pixelsToRem(18) };
-    overflow-y: hidden;
   }
 
   .title {

@@ -21,10 +21,7 @@ function FeaturedSliderPostListing ({ data }) {
 
   useState(function () {
     const shouldToggleRenderingHighResolutionImage = !isMobileOnly;
-
-    if (shouldToggleRenderingHighResolutionImage) {
-      toggleRenderingHighResolutionImage(true);
-    }
+    toggleRenderingHighResolutionImage(shouldToggleRenderingHighResolutionImage);
 
     return;
   }, []);
