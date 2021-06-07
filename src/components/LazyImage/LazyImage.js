@@ -14,10 +14,10 @@ function checkWhetherElementInViewport (ele) {
 
 function LazyImageRenderer ({
   src,
-  ratio = 1,
+  ratio,
   isRounded
 }) {
-  const ratioString = `${ (1 / ratio) * 100 }%`;
+  const ratioString = `${ (1 / (ratio || 1)) * 100 }%`;
   const imageRef = useRef(null);
   const imageLoaderRef = useRef(null);
   let [ isImageLoaded, toggleIsImageLoaded ] = useState(!src);
@@ -94,6 +94,13 @@ function LazyImageRenderer ({
         'lazy-image',
         { 'loading': !isImageLoaded }
       ) } />
+    <div
+      data-testid="lazy-image-backdrop"
+      className={ classnames(
+        'w-100 h-100',
+        { 'rounded-circle': isRounded },
+        'backdrop'
+      ) } />
   </Container>;
 }
 
@@ -103,8 +110,13 @@ function LazyImage (props) {
 
 LazyImage.propTypes = {
   src: string.isRequired,
-  ratio: number.isRequired,
+  ratio: number,
   isRounded: bool
+};
+
+LazyImage.defaultProps = {
+  ratio: 1,
+  isRounded: false
 };
 
 export default LazyImage;

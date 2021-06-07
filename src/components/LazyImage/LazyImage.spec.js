@@ -17,7 +17,13 @@ const SAMPLE_DATA = {
 };
 
 describe('LazyImage component', function () {
-  afterEach(cleanup);
+  afterEach(function () {
+    cleanup();
+
+    if (renderer && renderer.unmount) {
+      renderer.unmount();
+    }
+  });
 
   it('Should return 16x9 ratio image\'s snapshot', function () {
     const component = renderer.create(
@@ -40,8 +46,32 @@ describe('LazyImage component', function () {
 
   it('Should return a default component with "loading" class', function () {
     render(<LazyImage { ...SAMPLE_DATA } />);
-    const lazyImageRendererElement = screen.getByTestId('lazy-image');
+    const lazyImageRendererElement = screen.getByTestId('lazy-image'),
+      backdropElement = screen.getByTestId('lazy-image-backdrop');
     expect(lazyImageRendererElement).toHaveClass('loading');
+    expect(lazyImageRendererElement).toHaveStyle('padding-top: 56.25%');
+    expect(backdropElement).toBeInTheDocument();
+    expect(backdropElement).not.toHaveClass('rounded-circle');
+  });
+
+  it(
+    'Should return a default component with "loading" class even the browser is not supporting the "window.innerHeight" value',
+    function () {
+      global.innerHeight = undefined;
+      render(<LazyImage { ...SAMPLE_DATA } />);
+      const lazyImageRendererElement = screen.getByTestId('lazy-image'),
+        backdropElement = screen.getByTestId('lazy-image-backdrop');
+      expect(lazyImageRendererElement).toHaveClass('loading');
+      expect(lazyImageRendererElement).toHaveStyle('padding-top: 56.25%');
+      expect(backdropElement).toBeInTheDocument();
+      expect(backdropElement).not.toHaveClass('rounded-circle');
+    }
+  );
+
+  it('Should return an image in square form in case of the ratio still not been specified', function () {
+    render(<LazyImage src={ SAMPLE_DATA.src } ratio={ 0 } />);
+    const lazyImageRendererElement = screen.getByTestId('lazy-image');
+    expect(lazyImageRendererElement).toHaveStyle('padding-top: 100%');
   });
 
   xit('Should remove "loading" class in case of image to be displayed in the view', async function () {
