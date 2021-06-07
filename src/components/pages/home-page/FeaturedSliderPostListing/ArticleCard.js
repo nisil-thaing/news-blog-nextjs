@@ -7,15 +7,21 @@ import LazyImage from 'components/LazyImage/LazyImage';
 import ArticleAuthorInfo from 'components/ArticleAuthorInfo/ArticleAuthorInfo';
 
 function ArticleCard ({ data, isRenderHighResolutionImage }) {
+  const largeCoverImage = data?.featuredImage?.large || data?.featuredImage?.original || '',
+    mediumCoverImage = data?.featuredImage?.medium || '';
   const coverImage = isRenderHighResolutionImage
-    ? data?.featuredImage?.large
-    : data?.featuredImage?.medium;
+    ? largeCoverImage
+    : mediumCoverImage;
 
   return <Container className="d-flex flex-column bg-white rounded rounded-md-0 overflow-hidden">
     <Link href={ data?.link } passHref>
-      <a href="/" target="__blank" rel="noopener noreferrer">
+      <a
+        aria-label="Cover Image"
+        href="/"
+        target="__blank"
+        rel="noopener noreferrer">
         <LazyImage
-          src={ coverImage || '' }
+          src={ coverImage }
           ratio={ 16 / 9 } />
       </a>
     </Link>

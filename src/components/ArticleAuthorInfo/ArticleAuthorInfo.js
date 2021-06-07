@@ -27,15 +27,11 @@ function ArticleAuthorInfo ({ data, updatedAt, timeToReadInMinutes }) {
         isRounded />
     </div>
     <div className="d-flex flex-wrap align-items-center text-muted ml-2 pl-1">
-      <p className="mb-0 display-name">
+      <p data-testid="author-display-name" className="mb-0 display-name">
         { data?.displayName || '--' }
       </p>
-      {
-        modDateUntilNow && <>
-          <p className="mb-0 px-1">&bull;</p>
-          <p className="mb-0">{ modDateUntilNow }</p>
-        </>
-      }
+      <p className="mb-0 px-1">&bull;</p>
+      <p data-testid="author-modify-date" className="mb-0">{ modDateUntilNow }</p>
       {
         timeToReadInMinutes && <>
           <p className="mb-0 px-1">&bull;</p>

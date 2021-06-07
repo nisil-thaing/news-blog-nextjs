@@ -43,6 +43,7 @@ function FormRenderer ({ isValid, values, handleChange, handleBlur, handleSubmit
         onChange={ handleChange }
         autoComplete="on" />
       <button
+        aria-label="Toggle Showing Password"
         type="button"
         className="text-dark text-decoration-none p-0 pl-2 btn btn-link"
         onClick={ handleToggleShowingPassword }>

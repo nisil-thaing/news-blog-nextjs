@@ -1,6 +1,8 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { cleanup } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
+
+import '@testing-library/jest-dom';
 
 import ArticleAuthorInfo from './ArticleAuthorInfo';
 
@@ -13,7 +15,13 @@ const SAMPLE_DATA = {
 const UPDATED_AT = (new Date()).toUTCString();
 
 describe('ArticleAuthorInfo component', function () {
-  afterEach(cleanup);
+  afterEach(function () {
+    cleanup();
+
+    if (renderer && renderer.unmount) {
+      renderer.unmount();
+    }
+  });
 
   it('Should return full of author info on component snapshot', function () {
     const component = renderer.create(
@@ -24,5 +32,53 @@ describe('ArticleAuthorInfo component', function () {
     );
     let tree = component.toJSON();
     expect(tree).toMatchSnapshot();
+  });
+
+  it('Should return default displaying name in case of the article is missing name', function () {
+    const data = {
+      ...SAMPLE_DATA,
+      displayName: ''
+    };
+
+    render(
+      <ArticleAuthorInfo
+        data={ data }
+        updatedAt={ UPDATED_AT }
+        timeToReadInMinutes={ 10 } />
+    );
+
+    const displayingNameElement = screen.getByTestId('author-display-name');
+    expect(displayingNameElement).toBeInTheDocument();
+    expect(displayingNameElement).toHaveTextContent('--');
+  });
+
+  it('Should return default modify diffing date in case of missing "updateAt" information', function () {
+    render(
+      <ArticleAuthorInfo
+        data={ SAMPLE_DATA }
+        timeToReadInMinutes={ 10 } />
+    );
+
+    const modifyDateDiffingElement = screen.getByTestId('author-modify-date');
+    expect(modifyDateDiffingElement).toBeInTheDocument();
+    expect(modifyDateDiffingElement).toHaveTextContent('Unknown');
+  });
+
+  it('Should return default grey background avatar in case of missing "avatarUrl" information', function () {
+    const data = {
+      ...SAMPLE_DATA,
+      avatarUrl: ''
+    };
+
+    render(
+      <ArticleAuthorInfo
+        data={ data }
+        updatedAt={ UPDATED_AT }
+        timeToReadInMinutes={ 10 } />
+    );
+
+    const coverImageElement = screen.getByTestId('lazy-image');
+    expect(coverImageElement).toBeInTheDocument();
+    expect(coverImageElement).not.toHaveAttribute('style');
   });
 });

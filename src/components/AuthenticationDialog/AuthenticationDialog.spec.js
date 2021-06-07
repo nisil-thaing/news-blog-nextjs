@@ -1,15 +1,21 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { cleanup, fireEvent, getByTestId, render } from '@testing-library/react';
+import { cleanup, fireEvent, screen, render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
 import AuthenticationDialog from './AuthenticationDialog';
 import { LayoutContext } from 'hocs/withAuthenticationPopup';
 
-const SAMPLE_DATA = <section data-testid="testingAuthenticationDialogBody">This is dialog body</section>;
+const SAMPLE_DATA = <section data-testid="authentication-dialog-body-wrapper">This is dialog body</section>;
 
 describe('AuthenticationDialog component', function () {
-  afterEach(cleanup);
+  afterEach(function () {
+    cleanup();
+
+    if (renderer && renderer.unmount) {
+      renderer.unmount();
+    }
+  });
 
   it('Should return full of AuthenticationDialog \'s UI on component snapshot', function () {
     const component = renderer.create(
@@ -32,7 +38,7 @@ describe('AuthenticationDialog component', function () {
       </LayoutContext.Provider>
     );
 
-    expect(getByTestId(document, 'testingAuthenticationDialogBody')).toBeInTheDocument();
+    expect(screen.getByTestId('authentication-dialog-body-wrapper')).toBeInTheDocument();
   });
 
   it('Should showing AuthenticationDialog \'s UI with a clickable cross button to close the dialog', function () {
@@ -46,10 +52,10 @@ describe('AuthenticationDialog component', function () {
       </LayoutContext.Provider>
     );
 
-    const closeDialogButton = document.querySelector('.modal-header .close');
-    expect(closeDialogButton).toBeInTheDocument();
+    const closeDialogButtonElement = screen.getByRole('button');
+    expect(closeDialogButtonElement).toBeInTheDocument();
 
-    fireEvent.click(closeDialogButton);
+    fireEvent.click(closeDialogButtonElement);
 
     expect(closeDialogHandler).toBeCalledTimes(1);
   });

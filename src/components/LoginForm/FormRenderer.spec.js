@@ -3,9 +3,8 @@ import renderer from 'react-test-renderer';
 import {
   cleanup,
   fireEvent,
-  waitFor,
   render,
-  getByText
+  screen
 } from '@testing-library/react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
@@ -28,7 +27,13 @@ const SCHEMA = Yup.object().shape({
   };
 
 describe('FormRenderer inside LoginForm component', function () {
-  afterEach(cleanup);
+  afterEach(function () {
+    cleanup();
+
+    if (renderer && renderer.unmount) {
+      renderer.unmount();
+    }
+  });
 
   it('Should return form\'s snapshot', function () {
     const component = renderer.create(
@@ -44,7 +49,7 @@ describe('FormRenderer inside LoginForm component', function () {
   });
 
   it('Should disabled submit button by default', async function () {
-    const { container } = render(
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -52,14 +57,12 @@ describe('FormRenderer inside LoginForm component', function () {
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
-
-    expect(container.querySelector('button[type="submit"]')).toBeDisabled();
+    const submitButtonElement = screen.getByRole('button', { name: /Log in/i });
+    expect(submitButtonElement).toBeDisabled();
   });
 
   it('Should changes password input from "password" type to "text" type whenever user toggled showing password checkbox', function () {
-    const hiddenPasswordInputSelector = 'input[name="password"][type="password"]',
-      showingPasswordInputSelector = 'input[name="password"][type="text"]';
-    const { container } = render(
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -67,20 +70,22 @@ describe('FormRenderer inside LoginForm component', function () {
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
+    const passwordInputElement = screen.getByPlaceholderText(/Password/i);
+    expect(passwordInputElement).toBeInTheDocument();
+    expect(passwordInputElement).toHaveAttribute('type', 'password');
 
-    expect(container.querySelector(hiddenPasswordInputSelector)).toBeTruthy();
-    expect(container.querySelector(showingPasswordInputSelector)).toBeFalsy();
-
-    const togglingShowingPasswordBtn = container.querySelector('button[type="button"]');
-    expect(togglingShowingPasswordBtn).toBeTruthy();
+    const togglingShowingPasswordBtn = screen.getByRole('button', { name: /Toggle Showing Password/i });
+    expect(togglingShowingPasswordBtn).toBeInTheDocument();
 
     fireEvent.click(togglingShowingPasswordBtn);
-    expect(container.querySelector(hiddenPasswordInputSelector)).toBeFalsy();
-    expect(container.querySelector(showingPasswordInputSelector)).toBeTruthy();
+    expect(passwordInputElement).toHaveAttribute('type', 'text');
+
+    fireEvent.click(togglingShowingPasswordBtn);
+    expect(passwordInputElement).toHaveAttribute('type', 'password');
   });
 
   it('Should showing required email error', async function () {
-    const { container } = render(
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -89,19 +94,21 @@ describe('FormRenderer inside LoginForm component', function () {
       </Formik>
     );
 
-    const emailInput = container.querySelector('input[name="email"]');
+    const emailInputElement = screen.getByPlaceholderText(/Email Address/i);
+    expect(emailInputElement).toBeInTheDocument();
 
-    fireEvent.focus(emailInput);
-    fireEvent.blur(emailInput);
+    fireEvent.focus(emailInputElement);
+    fireEvent.blur(emailInputElement);
 
-    await waitFor(() => getByText(container, EMPTY_EMAIL_MESSAGE, { exact: true }));
+    const submitButtonElement = screen.getByRole('button', { name: /Log in/i });
+    const emailErrorMessageElement = await screen.findByText(EMPTY_EMAIL_MESSAGE, { exact: true });
 
-    expect(getByText(container, EMPTY_EMAIL_MESSAGE, { exact: true })).not.toBe(null);
-    expect(container.querySelector('button[type="submit"]')).toBeDisabled();
+    expect(emailErrorMessageElement).toBeInTheDocument(null);
+    expect(submitButtonElement).toBeDisabled();
   });
 
   it('Should showing wrong email format error', async function () {
-    const { container } = render(
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -110,20 +117,21 @@ describe('FormRenderer inside LoginForm component', function () {
       </Formik>
     );
 
-    const emailInput = container.querySelector('input[name="email"]');
+    const emailInputElement = screen.getByPlaceholderText(/Email Address/i);
 
-    fireEvent.focus(emailInput);
-    fireEvent.change(emailInput, { target: { value: 'somewrongemailformat' } });
-    fireEvent.blur(emailInput);
+    fireEvent.focus(emailInputElement);
+    fireEvent.change(emailInputElement, { target: { value: 'this_is_a_wrong_email_format_value' } });
+    fireEvent.blur(emailInputElement);
 
-    await waitFor(() => getByText(container, WRONG_EMAIL_FORMAT_MESSAGE, { exact: true }));
+    const submitButtonElement = screen.getByRole('button', { name: /Log in/i });
+    const emailErrorMessageElement = await screen.findByText(WRONG_EMAIL_FORMAT_MESSAGE, { exact: true });
 
-    expect(getByText(container, WRONG_EMAIL_FORMAT_MESSAGE, { exact: true })).not.toBe(null);
-    expect(container.querySelector('button[type="submit"]')).toBeDisabled();
+    expect(emailErrorMessageElement).toBeInTheDocument();
+    expect(submitButtonElement).toBeDisabled();
   });
 
   it('Should showing required password error', async function () {
-    const { container } = render(
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -132,19 +140,20 @@ describe('FormRenderer inside LoginForm component', function () {
       </Formik>
     );
 
-    const passwordInput = container.querySelector('input[name="password"]');
+    const passwordInputElement = screen.getByPlaceholderText(/Password/i);
 
-    fireEvent.focus(passwordInput);
-    fireEvent.blur(passwordInput);
+    fireEvent.focus(passwordInputElement);
+    fireEvent.blur(passwordInputElement);
 
-    await waitFor(() => getByText(container, EMPTY_PASSWORD_MESSAGE, { exact: true }));
+    const submitButtonElement = screen.getByRole('button', { name: /Log in/i });
+    const passwordErrorMessageElement = await screen.findByText(EMPTY_PASSWORD_MESSAGE, { exact: true });
 
-    expect(getByText(container, EMPTY_PASSWORD_MESSAGE, { exact: true })).not.toBe(null);
-    expect(container.querySelector('button[type="submit"]')).toBeDisabled();
+    expect(passwordErrorMessageElement).toBeInTheDocument();
+    expect(submitButtonElement).toBeDisabled();
   });
 
-  it('Should enabling submit button in case of valid data inputs', async function () {
-    const { container } = render(
+  it('Should enabling submit button in case of valid data inputs', function () {
+    render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
@@ -153,12 +162,13 @@ describe('FormRenderer inside LoginForm component', function () {
       </Formik>
     );
 
-    const emailInput = container.querySelector('input[name="email"]'),
-      passwordInput = container.querySelector('input[name="password"]');
+    const submitButtonElement = screen.getByRole('button', { name: /Log in/i }),
+      emailInputElement = screen.getByPlaceholderText(/Email Address/i),
+      passwordInputElement = screen.getByPlaceholderText(/Password/i);
 
-    fireEvent.change(emailInput, { target: { value: 'valid_email_here@testing_data.something' } });
-    fireEvent.change(passwordInput, { target: { value: 'thisisavalidpassword' } });
+    fireEvent.change(emailInputElement, { target: { value: 'valid_email_here@testing_data.something' } });
+    fireEvent.change(passwordInputElement, { target: { value: 'this_is_a_valid_password' } });
 
-    expect(container.querySelector('button[type="submit"]')).not.toBeDisabled();
+    expect(submitButtonElement).toBeEnabled();
   });
 });

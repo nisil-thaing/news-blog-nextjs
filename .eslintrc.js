@@ -7,13 +7,21 @@ module.exports = {
     node: true,
     jest: true
   },
+  plugins: [
+    'react',
+    'react-hooks',
+    'testing-library',
+    'jest-dom'
+  ],
   extends: [
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:import/errors',
     'plugin:import/warnings',
     'plugin:jsx-a11y/recommended',
-    'plugin:react-hooks/recommended'
+    'plugin:react-hooks/recommended',
+    'plugin:testing-library/react',
+    'plugin:jest-dom/recommended'
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -29,7 +37,6 @@ module.exports = {
       }
     }
   },
-  plugins: ['react', 'react-hooks'],
   rules: {
     'comma-dangle': ['error', 'never'],
     'react/prop-types': ['off'],

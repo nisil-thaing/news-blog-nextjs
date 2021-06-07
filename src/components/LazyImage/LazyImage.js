@@ -88,6 +88,7 @@ function LazyImageRenderer ({
   return <Container ratio={ ratioString }>
     <div
       ref={ imageRef }
+      data-testid="lazy-image"
       className={ classnames(
         { 'rounded-circle': isRounded },
         'lazy-image',
