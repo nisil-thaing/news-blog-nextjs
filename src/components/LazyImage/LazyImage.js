@@ -1,11 +1,33 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useRef,
+  useState
+} from 'react';
 import { bool, number, string } from 'prop-types';
 import classnames from 'classnames';
+import { v4 as uuidv4 } from 'uuid';
 
 import { Container } from './LazyImage.style';
 
-function checkWhetherElementInViewport (ele) {
-  const rect = ele.getBoundingClientRect();
+export function handleImageLoad (src, bingingElementRef, callback) {
+  if (bingingElementRef?.current) {
+    bingingElementRef.current.style.backgroundImage = `url("${ src }")`;
+  }
+
+  return callback && callback();
+}
+
+export function handleImageLoadingError (callback) {
+  return callback && callback();
+}
+
+function checkWhetherElementInViewport (element) {
+  if (!element) {
+    return false;
+  }
+
+  const rect = element.getBoundingClientRect();
 
   return rect.top >= 0
     && rect.left >= 0
@@ -21,6 +43,17 @@ function LazyImageRenderer ({
   const imageRef = useRef(null);
   const imageLoaderRef = useRef(null);
   let [ isImageLoaded, toggleIsImageLoaded ] = useState(!src);
+
+  const loadingImageHandler = handleImageLoad.bind(
+    this,
+    src,
+    imageRef,
+    handleDestroyLoadingImageListener
+  );
+  const loadingImageFailureHandler = handleImageLoadingError.bind(
+    this,
+    handleDestroyLoadingImageListener
+  );
 
   useEffect(function () {
     imageLoaderRef.current = new Image();
@@ -44,45 +77,30 @@ function LazyImageRenderer ({
   }, []);
 
   function registerLoadingImageEvents () {
-    imageLoaderRef.current?.addEventListener('load', handleImageLoad);
-    imageLoaderRef.current?.addEventListener('error', handleImageLoadingError);
-  }
-
-  function handleImageLoad () {
-    if (imageRef?.current) {
-      imageRef.current.style.backgroundImage = `url("${ src }")`;
-      handleDestroyLoadingImageListener();
-    }
-  }
-
-  function handleImageLoadingError () {
-    handleDestroyLoadingImageListener();
-
-    /* if (onLoadingFailure) {
-      onLoadingFailure();
-    } */
+    imageLoaderRef.current?.addEventListener('load', loadingImageHandler);
+    imageLoaderRef.current?.addEventListener('error', loadingImageFailureHandler);
   }
 
   function handleScroll () {
-    if (imageRef.current) {
-      const isElementInViewport = checkWhetherElementInViewport(imageRef.current);
+    const isElementInViewport = checkWhetherElementInViewport(imageRef.current);
 
-      if (!isImageLoaded && isElementInViewport && imageLoaderRef.current) {
-        imageLoaderRef.current.src = src;
-      }
+    if (!isImageLoaded && isElementInViewport && imageLoaderRef.current) {
+      imageLoaderRef.current.src = src;
     }
+
+    return null;
   }
 
   function handleDestroyLoadingImageListener () {
     toggleIsImageLoaded(true);
 
-    if (imageLoaderRef.current) {
-      imageLoaderRef.current.removeEventListener('load', handleImageLoad);
-      imageLoaderRef.current.removeEventListener('error', handleImageLoadingError);
-      imageLoaderRef.current = null;
-    }
+    imageLoaderRef.current?.removeEventListener('load', loadingImageHandler);
+    imageLoaderRef.current?.removeEventListener('error', loadingImageFailureHandler);
+    imageLoaderRef.current = null;
 
     window.removeEventListener('scroll', handleScroll);
+
+    return null;
   }
 
   return <Container ratio={ ratioString }>
@@ -105,7 +123,13 @@ function LazyImageRenderer ({
 }
 
 function LazyImage (props) {
-  return <LazyImageRenderer { ...props } />;
+  const uuid = useMemo(
+    () => uuidv4(),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [ props.src, props.isRounded, props.ratio ]
+  );
+
+  return <LazyImageRenderer key={ uuid } { ...props } />;
 }
 
 LazyImage.propTypes = {

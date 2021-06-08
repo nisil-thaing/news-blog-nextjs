@@ -2,19 +2,17 @@ import React from 'react';
 import renderer from 'react-test-renderer';
 import {
   cleanup,
-  fireEvent,
   render,
-  screen,
-  waitFor
+  screen
 } from '@testing-library/react';
 import '@testing-library/jest-dom';
 
-import LazyImage from './LazyImage';
+import LazyImage, { handleImageLoad, handleImageLoadingError } from './LazyImage';
 
 const SAMPLE_DATA = {
-  src: 'https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-9/42872933_1871916762904621_8392319564708315136_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=e3f864&_nc_ohc=WRdbHTLltPkAX-Vp8_V&_nc_ht=scontent-hkg4-1.xx&oh=f24bbe6504b76455f96e311b895c4a1e&oe=60C86BA1',
-  ratio: 16 / 9
-};
+    src: 'https://scontent-hkg4-1.xx.fbcdn.net/v/t1.6435-9/42872933_1871916762904621_8392319564708315136_n.jpg?_nc_cat=101&ccb=1-3&_nc_sid=e3f864&_nc_ohc=WRdbHTLltPkAX-Vp8_V&_nc_ht=scontent-hkg4-1.xx&oh=f24bbe6504b76455f96e311b895c4a1e&oe=60C86BA1',
+    ratio: 16 / 9
+  }, ALT_IMAGE = 'https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg';
 
 describe('LazyImage component', function () {
   afterEach(function () {
@@ -36,7 +34,7 @@ describe('LazyImage component', function () {
   it('Should return circle image\'s snapshot', function () {
     const component = renderer.create(
       <LazyImage
-        src="https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg"
+        src={ ALT_IMAGE }
         ratio={ 1 }
         isRounded />
     );
@@ -74,24 +72,61 @@ describe('LazyImage component', function () {
     expect(lazyImageRendererElement).toHaveStyle('padding-top: 100%');
   });
 
-  xit('Should remove "loading" class in case of image to be displayed in the view', async function () {
-    render(<LazyImage { ...SAMPLE_DATA } />);
-    fireEvent.scroll(window);
+  it('Should update render new image in case of changing props', function () {
+    const { rerender } = render(<LazyImage { ...SAMPLE_DATA } />);
 
-    await waitFor(function () {
-      const lazyImageRendererElement = screen.getByTestId('lazy-image');
-      expect(lazyImageRendererElement).not.toHaveClass('loading');
-    });
+    expect(screen.getByTestId('lazy-image')).toHaveClass('loading');
+    expect(screen.getByTestId('lazy-image')).toHaveStyle('padding-top: 56.25%');
+    expect(screen.getByTestId('lazy-image-backdrop')).toBeInTheDocument();
+    expect(screen.getByTestId('lazy-image-backdrop')).not.toHaveClass('rounded-circle');
+
+    // rerender(<LazyImage { ...SAMPLE_DATA } src={ ALT_IMAGE } />);
+
+    // expect(screen.getByTestId('lazy-image')).toHaveClass('loading');
+    // expect(screen.getByTestId('lazy-image')).toHaveStyle('padding-top: 56.5%');
+    // expect(screen.getByTestId('lazy-image-backdrop')).toBeInTheDocument();
+    // expect(screen.getByTestId('lazy-image-backdrop')).not.toHaveClass('rounded-circle');
+
+    rerender(<LazyImage src={ ALT_IMAGE } ratio={ 1 } />);
+
+    expect(screen.getByTestId('lazy-image')).toHaveClass('loading');
+    expect(screen.getByTestId('lazy-image')).toHaveStyle('padding-top: 100%');
+    expect(screen.getByTestId('lazy-image-backdrop')).toBeInTheDocument();
+    expect(screen.getByTestId('lazy-image-backdrop')).not.toHaveClass('rounded-circle');
+
+    rerender(<LazyImage src={ ALT_IMAGE } ratio={ 1 } isRounded />);
+
+    expect(screen.getByTestId('lazy-image')).toHaveClass('loading');
+    expect(screen.getByTestId('lazy-image')).toHaveStyle('padding-top: 100%');
+    expect(screen.getByTestId('lazy-image')).toHaveClass('rounded-circle');
+    expect(screen.getByTestId('lazy-image-backdrop')).toBeInTheDocument();
+    expect(screen.getByTestId('lazy-image-backdrop')).toHaveClass('rounded-circle');
+  });
+});
+
+/* eslint-disable jest-dom/prefer-to-have-style */
+describe('LazyImage\'s utility functions', function () {
+  afterEach(cleanup);
+
+  it('handleImageLoad should to be called', function () {
+    const refSpy = jest.spyOn(React, 'useRef').mockReturnValueOnce({ current: null });
+    const callbackFn = jest.fn();
+    
+    handleImageLoad(SAMPLE_DATA.src, refSpy, callbackFn);
+    expect(callbackFn).toBeCalledTimes(1);
+
+    const refSpyWithImagHandler = { current: { style: {} } };
+    const handleImageLoadCallbackFn = jest.fn();
+    handleImageLoad(SAMPLE_DATA.src, refSpyWithImagHandler, handleImageLoadCallbackFn);
+    console.log({ refSpyWithImagHandler });
+    expect(handleImageLoadCallbackFn).toBeCalledTimes(1);
+    expect(refSpyWithImagHandler.current.style.backgroundImage).toEqual(`url("${ SAMPLE_DATA.src }")`);
   });
 
-  xit('Should remove "loading" class in case of image to be displayed in the view, and "document.documentElement.clientHeight" to be called instead of "window.innerHeight"', async function () {
-    render(<LazyImage { ...SAMPLE_DATA } />);
-    window.innerHeight = 0;
-    fireEvent.scroll(window);
+  it('handleImageLoadingError should to be called', function () {
+    const callbackFn = jest.fn();
 
-    await waitFor(function () {
-      const lazyImageRendererElement = screen.getByTestId('lazy-image');
-      expect(lazyImageRendererElement).not.toHaveClass('loading');
-    });
+    handleImageLoadingError(callbackFn);
+    expect(callbackFn).toBeCalledTimes(1);
   });
 });
