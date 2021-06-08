@@ -20,7 +20,10 @@ function NewsFeed ({ data, isClientSide }) {
           data.map((article, index) => <li
             key={ article.id }
             className={ classnames({ 'mt-4 mt-md-5': index > 0 }) }>
-            <ArticleCard data={ article } coverImageRatio={ coverImageRatio } />
+            <ArticleCard
+              data={ article }
+              coverImageRatio={ coverImageRatio }
+              isRenderHighResolutionImage={ !isMobileOnly } />
           </li>)
         }
       </Container>

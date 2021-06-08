@@ -1,24 +1,32 @@
 import React from 'react';
-import { arrayOf, number, oneOfType, shape, string } from 'prop-types';
+import {
+  arrayOf,
+  oneOfType,
+  shape,
+  bool,
+  number,
+  string
+} from 'prop-types';
 import Link from 'next/link';
 
 import { ArticleCardWrapper as Container } from './NewsFeed.style';
 import LazyImage from 'components/LazyImage/LazyImage';
 import ArticleAuthorInfo from 'components/ArticleAuthorInfo/ArticleAuthorInfo';
 
-function ArticleCard ({ data, coverImageRatio }) {
+function ArticleCard ({ data, coverImageRatio, isRenderHighResolutionImage }) {
   return <Container className="row m-0">
     <Link href={ data?.link } passHref>
       <a
+        aria-label="Cover Image"
         href="/"
         className="col-4 col-md-5 p-0 left-content"
         target="_blank"
         rel="noopener noreferrer">
         <LazyImage
           src={
-            coverImageRatio === 1
-              ? data?.featuredImage?.thumbnail
-              : data?.featuredImage?.medium
+            isRenderHighResolutionImage
+              ? data?.featuredImage?.medium
+              : data?.featuredImage?.thumbnail
           }
           ratio={ coverImageRatio } />
       </a>
@@ -65,12 +73,14 @@ ArticleCard.propTypes = {
       name: string
     }))
   }),
-  coverImageRatio: number
+  coverImageRatio: number,
+  isRenderHighResolutionImage: bool
 };
 
 ArticleCard.defaultProps = {
   data: {},
-  coverImageRatio: 1
+  coverImageRatio: 1,
+  isRenderHighResolutionImage: false
 };
 
 export default ArticleCard;
