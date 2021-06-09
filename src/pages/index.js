@@ -7,6 +7,7 @@ import { isMobileOnly } from 'react-device-detect';
 
 import { Container } from 'styles/pages/HomePage.style';
 import withAuthenticationPopup from 'hocs/withAuthenticationPopup';
+import withSSREnvironment from 'hocs/withSSREnvironment';
 import MainLayout from 'containers/MainLayout/MainLayout';
 import MainHeader from 'components/MainHeader/MainHeader';
 import MainFooter from 'components/MainFooter/MainFooter';
@@ -27,6 +28,7 @@ import {
 const articleService = new ArticleService();
 
 const MainLayoutWithAuthenticationPopup = withAuthenticationPopup(MainLayout);
+const NewsFeedRenderer = withSSREnvironment(NewsFeed);
 
 function HomePage ({
   featuredArticles,
@@ -67,7 +69,7 @@ function HomePage ({
                     Loading...
                   </Fragment>
                 }>
-                <NewsFeed data={ newsFeed } />
+                <NewsFeedRenderer data={ newsFeed } />
               </InfiniteScroll>
             </section>
           </section>

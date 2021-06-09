@@ -1,16 +1,22 @@
 import React from 'react';
-import { arrayOf, number, oneOfType, shape, string } from 'prop-types';
+import {
+  arrayOf,
+  shape,
+  oneOfType,
+  bool,
+  number,
+  string
+} from 'prop-types';
 import { isMobileOnly } from 'react-device-detect';
 import classnames from 'classnames';
 
 import { Container } from './NewsFeed.style';
 import ArticleCard from './ArticleCard';
 import ArticleCardPlaceholder from './ArticleCardPlaceholder';
-import withSSREnvironment from 'hocs/withSSREnvironment';
 
 function NewsFeed ({ data, isClientSide }) {
-  const coverImageRatio = isClientSide
-    ? (isMobileOnly ? 1 : 16 / 9)
+  const coverImageRatio = isClientSide && !isMobileOnly
+    ? 16 / 9
     : 1;
 
   return <>{
@@ -19,6 +25,7 @@ function NewsFeed ({ data, isClientSide }) {
         {
           data.map((article, index) => <li
             key={ article.id }
+            aria-label="News Feed Item"
             className={ classnames({ 'mt-4 mt-md-5': index > 0 }) }>
             <ArticleCard
               data={ article }
@@ -27,7 +34,7 @@ function NewsFeed ({ data, isClientSide }) {
           </li>)
         }
       </Container>
-      : <Container className="mt-3 p-3">
+      : <Container aria-label="News Feed Loading Placeholder" className="mt-3 p-3">
         <ArticleCardPlaceholder />
       </Container>
   }</>;
@@ -36,11 +43,13 @@ function NewsFeed ({ data, isClientSide }) {
 NewsFeed.propTypes = {
   data: arrayOf(shape({
     id: oneOfType([string, number])
-  }))
+  })),
+  isClientSide: bool
 };
 
 NewsFeed.defaultProps = {
-  data: []
+  data: [],
+  isClientSide: false
 };
 
-export default withSSREnvironment(NewsFeed);
+export default NewsFeed;
