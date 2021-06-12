@@ -96,7 +96,10 @@ function withAuthenticationPopup (WrapperComponent) {
         !props.isLoggedInState && <AuthenticationDialog>
           {
             props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG
-              && <LoginFormRenderer onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm } />
+              && <LoginFormRenderer
+                onSwitchToRegistrationForm={ handleSwitchingToRegistrationForm }
+                onSkip={ props.hideAuthenticationDialog }
+                onFinish={ props.fetchAuthenticationUserProfile } />
           }
           {
             props.authenticationDialogState.type === AUTHENTICATION_DIALOG_TYPES.REGISTRATION_DIALOG

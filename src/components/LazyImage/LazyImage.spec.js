@@ -115,12 +115,11 @@ describe('LazyImage\'s utility functions', function () {
     handleImageLoad(SAMPLE_DATA.src, refSpy, callbackFn);
     expect(callbackFn).toBeCalledTimes(1);
 
-    const refSpyWithImagHandler = { current: { style: {} } };
+    const refSpyWithImageHandler = { current: { style: {} } };
     const handleImageLoadCallbackFn = jest.fn();
-    handleImageLoad(SAMPLE_DATA.src, refSpyWithImagHandler, handleImageLoadCallbackFn);
-    console.log({ refSpyWithImagHandler });
+    handleImageLoad(SAMPLE_DATA.src, refSpyWithImageHandler, handleImageLoadCallbackFn);
     expect(handleImageLoadCallbackFn).toBeCalledTimes(1);
-    expect(refSpyWithImagHandler.current.style.backgroundImage).toEqual(`url("${ SAMPLE_DATA.src }")`);
+    expect(refSpyWithImageHandler.current.style.backgroundImage).toEqual(`url("${ SAMPLE_DATA.src }")`);
   });
 
   it('handleImageLoadingError should to be called', function () {

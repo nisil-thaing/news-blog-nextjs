@@ -17,8 +17,14 @@ class AuthenticationService {
 
   async requestToLogin ({ email: username, password }) {
     try {
-      const responseData = await httpClient.post(this.#authTokenUrl, { username, password });
-      return getDataBodyFromResponseToData(responseData);
+      const responseData = await httpClient.post(this.#authTokenUrl, { username, password }),
+        result = getDataBodyFromResponseToData(responseData);
+
+      if (!result?.id_token) {
+        throw new Error('Oops! Something went wrong!');
+      }
+
+      return result;
     } catch (err) {
       return mapErrorResponseToErrorObject(err);
     }
