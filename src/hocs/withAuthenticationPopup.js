@@ -53,8 +53,14 @@ function mapDispatchToProps (dispatch) {
   };
 }
 
-export const LayoutContext = createContext();
+const LayoutContext = createContext();
 const LoginFormRenderer = withLoginHandler(LoginForm);
+
+export function LayoutContextProvider ({ children, ...restProps }) {
+  return <LayoutContext.Provider value={ restProps }>
+    { children }
+  </LayoutContext.Provider>;
+}
 
 function withAuthenticationPopup (WrapperComponent) {
   const enhance = compose(connect(mapStateToProps, mapDispatchToProps));
@@ -84,7 +90,7 @@ function withAuthenticationPopup (WrapperComponent) {
       props.showAuthenticationDialog(AUTHENTICATION_DIALOG_TYPES.LOGIN_DIALOG);
     }
 
-    return <LayoutContext.Provider value={ contextProps }>
+    return <LayoutContextProvider { ...contextProps }>
       <WrapperComponent
         { ...props }
         authenticationDialogState={ undefined }
@@ -107,7 +113,7 @@ function withAuthenticationPopup (WrapperComponent) {
           }
         </AuthenticationDialog>
       }
-    </LayoutContext.Provider>;
+    </LayoutContextProvider>;
   });
 }
 
