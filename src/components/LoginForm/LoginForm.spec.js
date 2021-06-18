@@ -1,29 +1,35 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import { cleanup } from '@testing-library/react';
 
 import LoginForm from './LoginForm';
 
 describe('LoginForm component', function () {
-  afterEach(cleanup);
+  let rendererInstance = null;
+
+  afterEach(function () {
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
+    }
+  });
 
   it('Should return component\'s snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <LoginForm
         isLoading={ false }
-        onSwitchToRegistrationForm={ () => {} }
-        onSubmit={ () => {} } />);
-    let tree = component.toJSON();
+        onSwitchToRegistrationForm={ jest.fn() }
+        onSubmit={ jest.fn() } />);
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
   it('Should return component\'s snapshot while component loading', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <LoginForm
         isLoading={ true }
-        onSwitchToRegistrationForm={ () => {} }
-        onSubmit={ () => {} } />);
-    let tree = component.toJSON();
+        onSwitchToRegistrationForm={ jest.fn() }
+        onSubmit={ jest.fn() } />);
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

@@ -5,15 +5,18 @@ import FeaturedSliderPostListing from './FeaturedSliderPostListing';
 import ARTICLES from 'mock-data/articles.json';
 
 describe('FeaturedSliderPostListing - slider component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
     }
   });
 
   it('Should return full of slider component snapshot', function () {
-    const component = renderer.create(<FeaturedSliderPostListing data={ ARTICLES } />);
-    let tree = component.toJSON();
+    rendererInstance = renderer.create(<FeaturedSliderPostListing data={ ARTICLES } />);
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 });

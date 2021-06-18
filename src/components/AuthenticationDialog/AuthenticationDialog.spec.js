@@ -19,23 +19,25 @@ function renderComponentWithLayoutContext (data, contextValues) {
 }
 
 describe('AuthenticationDialog component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
     cleanup();
 
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
     }
   });
 
   it('Should return full of AuthenticationDialog \'s UI on component snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <LayoutContextProvider value={{}}>
         <AuthenticationDialog>
           { SAMPLE_DATA }
         </AuthenticationDialog>
       </LayoutContextProvider>
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 

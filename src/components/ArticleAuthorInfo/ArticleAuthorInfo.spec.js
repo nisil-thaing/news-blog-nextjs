@@ -15,22 +15,25 @@ const SAMPLE_DATA = {
 const UPDATED_AT = (new Date()).toUTCString();
 
 describe('ArticleAuthorInfo component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
     cleanup();
 
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
     }
   });
 
   it('Should return full of author info on component snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <ArticleAuthorInfo
         data={ SAMPLE_DATA }
         updatedAt={ UPDATED_AT }
         timeToReadInMinutes={ 10 } />
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 

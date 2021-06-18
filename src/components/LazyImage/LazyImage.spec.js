@@ -15,30 +15,33 @@ const SAMPLE_DATA = {
   }, ALT_IMAGE = 'https://i.pinimg.com/736x/94/26/33/9426330b9cc93cfab0c060046f24ae47--choices-quotes-badass-quotes.jpg';
 
 describe('LazyImage component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
     cleanup();
 
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
     }
   });
 
   it('Should return 16x9 ratio image\'s snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <LazyImage { ...SAMPLE_DATA } />
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
   
   it('Should return circle image\'s snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <LazyImage
         src={ ALT_IMAGE }
         ratio={ 1 }
         isRounded />
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 

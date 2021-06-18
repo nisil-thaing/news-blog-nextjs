@@ -4,14 +4,17 @@ import {
   cleanup,
   fireEvent,
   render,
-  screen
+  screen,
+  waitFor
 } from '@testing-library/react';
 import * as Yup from 'yup';
 import { Formik } from 'formik';
+
 import '@testing-library/jest-dom';
 
 import FormRenderer from './FormRenderer';
 
+const onSubmitFn = jest.fn();
 const EMPTY_EMAIL_MESSAGE = 'EMPTY_EMAIL_MESSAGE',
   WRONG_EMAIL_FORMAT_MESSAGE = 'WRONG_EMAIL_FORMAT_MESSAGE',
   EMPTY_PASSWORD_MESSAGE = 'EMPTY_PASSWORD_MESSAGE';
@@ -27,24 +30,27 @@ const SCHEMA = Yup.object().shape({
   };
 
 describe('FormRenderer inside LoginForm component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
     cleanup();
 
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
     }
   });
 
   it('Should return form\'s snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
@@ -53,7 +59,7 @@ describe('FormRenderer inside LoginForm component', function () {
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
@@ -66,10 +72,11 @@ describe('FormRenderer inside LoginForm component', function () {
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
+
     const passwordInputElement = screen.getByPlaceholderText(/Password/i);
     expect(passwordInputElement).toBeInTheDocument();
     expect(passwordInputElement).toHaveAttribute('type', 'password');
@@ -89,7 +96,7 @@ describe('FormRenderer inside LoginForm component', function () {
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
@@ -112,7 +119,7 @@ describe('FormRenderer inside LoginForm component', function () {
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
@@ -135,7 +142,7 @@ describe('FormRenderer inside LoginForm component', function () {
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
@@ -152,12 +159,12 @@ describe('FormRenderer inside LoginForm component', function () {
     expect(submitButtonElement).toBeDisabled();
   });
 
-  it('Should enabling submit button in case of valid data inputs', function () {
+  it('Should enabling submit button in case of valid data inputs', async function () {
     render(
       <Formik
         initialValues={ INITIAL_DATA }
         validationSchema={ SCHEMA }
-        onSubmit={ () => {} }>
+        onSubmit={ onSubmitFn }>
         { props => <FormRenderer { ...props } /> }
       </Formik>
     );
@@ -170,5 +177,9 @@ describe('FormRenderer inside LoginForm component', function () {
     fireEvent.change(passwordInputElement, { target: { value: 'this_is_a_valid_password' } });
 
     expect(submitButtonElement).toBeEnabled();
+
+    fireEvent.click(submitButtonElement);
+
+    await waitFor(() => expect(onSubmitFn).toBeCalledTimes(1));
   });
 });

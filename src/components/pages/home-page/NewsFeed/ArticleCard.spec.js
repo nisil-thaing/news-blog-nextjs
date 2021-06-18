@@ -10,22 +10,25 @@ import ARTICLES from 'mock-data/articles.json';
 const ARTICLE_DATA = ARTICLES[0];
 
 describe('NewsFeed - ArticleCard component', function () {
+  let rendererInstance = null;
+
   afterEach(function () {
     cleanup();
 
-    if (renderer && renderer.unmount) {
-      renderer.unmount();
+    if (rendererInstance?.unmount) {
+      rendererInstance.unmount();
+      rendererInstance = null;
     }
   });
 
   it('Should return full of article info on component snapshot', function () {
-    const component = renderer.create(
+    rendererInstance = renderer.create(
       <ArticleCard
         data={ ARTICLE_DATA }
         coverImageRatio={ 16 / 9 }
         isRenderHighResolutionImage />
     );
-    let tree = component.toJSON();
+    const tree = rendererInstance.toJSON();
     expect(tree).toMatchSnapshot();
   });
 
