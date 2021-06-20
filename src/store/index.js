@@ -2,9 +2,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { HYDRATE, createWrapper } from 'next-redux-wrapper';
 import createSagaMiddleware from 'redux-saga';
 
-// import count from './count/reducer';
-// import tick from './tick/reducer';
-
 import createRootReducer from 'store/reducers';
 import rootSaga from 'store/sagas';
 
